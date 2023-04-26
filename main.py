@@ -10,8 +10,11 @@ import os
 # TODO: magari si puù fare più di un algoritmo... non sembra così tanto lavoro
 # TODO: c'è anche da fare il readme di github
 
+NO_DISPLAY = True
+
 def main(): 
-    os.environ["SDL_VIDEODRIVER"] = "dummy"
+    if NO_DISPLAY: 
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
 
     algorithm = MAP_Elites()
     algorithm.run()
