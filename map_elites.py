@@ -6,7 +6,7 @@ import custom_combined_arms
 from environment_data import EnvironmentData
 
 NUMBER_OF_EPISODES = 10
-NUMBER_OF_EPOCHS = 100
+NUMBER_OF_EPOCHS = 1
 
 # TODO: questi sono parametri dell'algoritmo
 ALLOW_MUTATION = True
