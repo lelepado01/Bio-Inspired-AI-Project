@@ -8,7 +8,8 @@ Boh
 
 ### TODOs
 
-- [ ] Add a README.md file to the project
+- [ ] Finish README.md file of the project
+- [ ] visualizzazione della griglia del fitness (magari anche over time)
 - [ ] fare la parte dell'enviroment, capire se si possono passare tutti i parametri alla funzione env
 - [ ] spostare consts e metterle come parametri dell'algoritmo, vanno spostati nella classe e decisi nel main
 - [ ] espandere a più dimensioni (credo almeno due)

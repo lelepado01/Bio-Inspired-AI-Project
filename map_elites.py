@@ -1,12 +1,16 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import random
+
 from pettingzoo.utils import random_demo
 
 import custom_combined_arms
 from environment_data import EnvironmentData
 
+LOG_DIRECTORY = "logs/"
+
 NUMBER_OF_EPISODES = 1
-NUMBER_OF_EPOCHS = 10
+NUMBER_OF_EPOCHS = 2
 
 # TODO: questi sono parametri dell'algoritmo, 
 #   vanno spostati nella classe e decisi nel main
@@ -17,6 +21,7 @@ class MAP_Elites:
     def __init__(self):
         # TODO: questi parametri vanno fatti meglio
         self.current_epoch = 0
+        self.log_counter = 0
         self.num_dimensions = 1
         self.num_cells = 5
         # range di valori per EnvironmentData,
@@ -55,8 +60,6 @@ class MAP_Elites:
         print("--- Running MAP...")
         while not self.stopping_criteria_met():
             print(f"Running: {self.current_epoch}")
-            print("Grid is: ")
-            print(self.solution_space_grid)
             # Select a cell in the grid based on some selection criteria
             cell_index = self.select_cell()
             # Mutate the solution in the selected cell
@@ -68,6 +71,7 @@ class MAP_Elites:
             if fitness > self.solution_space_grid[cell_index][1]:
                 self.solution_space_grid[cell_index] = (mutated_solution, fitness)
 
+            self.log("test", as_plot=True)
             self.current_epoch += 1
 
     def fitness_function(self, solution):
@@ -102,3 +106,25 @@ class MAP_Elites:
         # Select the best solutions from each cell in the grid
         best_solutions = [cell[0] for cell in self.solution_space_grid if cell is not None]
         return best_solutions
+    
+    def log(self, file=None, as_plot=False): 
+        if file is not None: 
+            if as_plot:
+                ls = np.array([[i[1] for i in self.solution_space_grid]])
+
+                plt.imshow(ls, cmap='hot', interpolation='nearest')
+                if self.log_counter == 0: 
+                    plt.colorbar()
+                plt.savefig(LOG_DIRECTORY + file + "_"+ str(self.log_counter))
+                self.log_counter += 1
+            else: 
+                f = open(LOG_DIRECTORY + file, "+a")
+                f.write("[")
+                for i in self.solution_space_grid: 
+                    f.write(f"|{round(i[1], 2)}|")
+                f.write("]\n")
+        else: 
+            print("[", end="")
+            for i in self.solution_space_grid: 
+                print(f"|{round(i[1], 2)}|", end=" ")
+            print("]")
