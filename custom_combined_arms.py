@@ -26,6 +26,7 @@ def parallel_env(
     extra_features=False,
     render_mode=None,
     seed=None,
+    env_data=None,
     **reward_args
 ):
     env_reward_args = dict(**default_reward_args)
@@ -38,6 +39,7 @@ def parallel_env(
         extra_features,
         render_mode,
         seed,
+        env_data,
     )
 
 
@@ -45,6 +47,7 @@ def raw_env(
     map_size=default_map_size,
     max_cycles=max_cycles_default,
     minimap_mode=minimap_mode_default,
+    env_data=None,
     extra_features=False,
     render_mode=None,
     seed=None,
@@ -58,6 +61,7 @@ def raw_env(
             extra_features,
             render_mode=render_mode,
             seed=seed,
+            env_data=env_data,
             **reward_args
         )
     )
@@ -70,11 +74,13 @@ def get_config(
     map_size,
     minimap_mode,
     seed,
+    env_data,
     step_reward,
     dead_penalty,
     attack_penalty,
     attack_opponent_reward,
 ):
+    # TODO: usa env_data
     gw = magent2.gridworld
     cfg = gw.Config()
 
@@ -263,6 +269,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         extra_features,
         render_mode=None,
         seed=None,
+        env_data=None,
     ):
         EzPickle.__init__(
             self,
@@ -275,7 +282,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
             seed,
         )
         assert map_size >= 16, "size of map must be at least 16"
-        env = magent2.GridWorld(get_config(map_size, minimap_mode, seed, **reward_args))
+        env = magent2.GridWorld(get_config(map_size, minimap_mode, seed, env_data, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
         reward_range = [
             np.minimum(reward_vals, 0).sum(),

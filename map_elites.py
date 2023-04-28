@@ -18,35 +18,32 @@ ALLOW_MUTATION = True
 ALLOW_CROSSOVER = True
 
 class MAP_Elites: 
-    def __init__(self):
+    def __init__(self, problem_parameters):
         # TODO: questi parametri vanno fatti meglio
         self.current_epoch = 0
         self.log_counter = 0
         self.num_dimensions = 1
-        self.num_cells = 5
+        self.cells_in_grid = problem_parameters.cells_in_grid
+        self.total_agents = problem_parameters.total_agents
         # range di valori per EnvironmentData,
         # dicono che non possiamo avere 51 melee se ci sono al max 
         # 50 unità totali per team
         # TODO: integrare questo nella classe EnvironmentData e non qui
-        self.dimension_range = (0, 10)
+        self.cell_dimension = self.total_agents // self.cells_in_grid
+        self.cell_boundaries = [i * self.cell_dimension for i in range(self.cells_in_grid)]
 
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
         # dove enviroment data è il "genotipo" (ex. 5 melee e 5 ranged)
         # TODO: da espandere a più dimensioni (credo almeno due)
-        self.solution_space_grid = np.empty(self.num_cells, dtype=object)
+        self.solution_space_grid = np.empty(self.cells_in_grid, dtype=object)
 
         print("--- Initializing grid...")
-        self.init_grid()
+        self.init_grid(problem_parameters)
 
-    def init_grid(self): 
-        for i in range(self.num_cells):
-            # Per ogni item nella griglia inizializzaimo una soluzjone random
-            low, high = self.dimension_range
-            solution = np.random.uniform(low=low, high=high, size=self.num_dimensions)
-
-            envdata = EnvironmentData(50)
-
+    def init_grid(self, problem_parameters): 
+        for i in range(self.cells_in_grid):
+            envdata = EnvironmentData(problem_parameters, i)
             # e passiamo questa soluzione nel giochino per vedere come performa, 
             # restituisce direttamente il total_reward, quello che dobbiamo massimizzare
             fitness = self.fitness_function(envdata)
@@ -74,10 +71,10 @@ class MAP_Elites:
             self.log("test", as_plot=True)
             self.current_epoch += 1
 
-    def fitness_function(self, solution):
+    def fitness_function(self, env_data):
         # execute environment with current ratio of melee and ranged units
         print("Evaluating enviroment...")
-        env = custom_combined_arms.env(render_mode='human')
+        env = custom_combined_arms.env(env_data=env_data, render_mode='human')
         fitness_score = random_demo(env, render=False, episodes=NUMBER_OF_EPISODES)
 
         return fitness_score
