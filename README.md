@@ -32,3 +32,4 @@ https://arxiv.org/pdf/2104.03936.pdf
 
 Magent2 (andrà citato sicuro): 
 https://github.com/Farama-Foundation/MAgent2
+//ciao
