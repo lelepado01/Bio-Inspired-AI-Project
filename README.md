@@ -8,7 +8,7 @@ Boh
 
 ### TODOs
 
-- [ ] Finish README.md file of the project
+- [ ] Finish README.md file of the project CIAO
 - [x] visualizzazione della griglia del fitness (magari anche over time)
 - [x] capire se si possono passare tutti i parametri alla funzione env
 - [ ] fare la parte dell'enviroment
