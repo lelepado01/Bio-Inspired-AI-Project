@@ -81,6 +81,7 @@ def get_config(
     attack_opponent_reward,
 ):
     # TODO: usa env_data
+
     gw = magent2.gridworld
     cfg = gw.Config()
 
@@ -229,8 +230,8 @@ def generate_map(env, map_size, handles):
     for x, y in pos[0] + pos[1]:
         if not (0 < x < width - 1 and 0 < y < height - 1):
             assert False
-    env.add_agents(handles[0], method="custom", pos=pos[0])
-    env.add_agents(handles[1], method="custom", pos=pos[1])
+    env.add_agents(handles[0], method="random", n=10)
+    env.add_agents(handles[1], method="random", n=10)
 
     # right
     n = init_num
@@ -249,8 +250,8 @@ def generate_map(env, map_size, handles):
     for x, y in pos[0] + pos[1]:
         if not (0 < x < width - 1 and 0 < y < height - 1):
             assert False
-    env.add_agents(handles[2], method="custom", pos=pos[0])
-    env.add_agents(handles[3], method="custom", pos=pos[1])
+    env.add_agents(handles[2], method="random", n=10)
+    env.add_agents(handles[3], method="random", n=10)
 
 
 class _parallel_env(magent_parallel_env, EzPickle):

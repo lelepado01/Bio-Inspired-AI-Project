@@ -13,11 +13,11 @@ Boh
 - [x] capire se si possono passare tutti i parametri alla funzione env
 - [ ] fare la parte dell'enviroment
 - [x] passare parametri della simulazione in una sola classe
-- [ ] spostare consts e metterle come parametri dell'algoritmo, vanno spostati nella classe e decisi nel main
+- [x] spostare consts e metterle come parametri dell'algoritmo, vanno spostati nella classe e decisi nel main
 - [ ] espandere a più dimensioni (credo almeno due)
 - [ ] funzioni di mutation e crossover in environment_data.py
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
-- [ ] fare in modo che MAP_Elites non stampi sempre tutto tutto
+- [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
 - [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
 
 

@@ -3,7 +3,7 @@ from map_elites import MAP_Elites
 from problem_params import ProblemParameters
 import os
 
-NO_DISPLAY = True
+NO_DISPLAY = False
 
 def main(): 
     if NO_DISPLAY: 

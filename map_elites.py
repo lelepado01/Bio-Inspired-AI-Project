@@ -5,17 +5,11 @@ import random
 from pettingzoo.utils import random_demo
 
 import custom_combined_arms
+from problem_params import ProblemParameters
 from environment_data import EnvironmentData
 
 LOG_DIRECTORY = "logs/"
-
-NUMBER_OF_EPISODES = 1
-NUMBER_OF_EPOCHS = 2
-
-# TODO: questi sono parametri dell'algoritmo, 
-#   vanno spostati nella classe e decisi nel main
-ALLOW_MUTATION = True
-ALLOW_CROSSOVER = True
+DEBUG = False
 
 class MAP_Elites: 
     def __init__(self, problem_parameters):
@@ -25,6 +19,13 @@ class MAP_Elites:
         self.num_dimensions = 1
         self.cells_in_grid = problem_parameters.cells_in_grid
         self.total_agents = problem_parameters.total_agents
+
+        #setting of problem parameters as self
+        self.allow_mutation = problem_parameters.allow_mutation
+        self.allow_crossover = problem_parameters.allow_crossover
+        self.number_of_episodes = problem_parameters.number_of_episodes
+        self.number_of_epochs = problem_parameters.number_of_epochs
+
         # range di valori per EnvironmentData,
         # dicono che non possiamo avere 51 melee se ci sono al max 
         # 50 unità totali per team
@@ -38,7 +39,8 @@ class MAP_Elites:
         # TODO: da espandere a più dimensioni (credo almeno due)
         self.solution_space_grid = np.empty(self.cells_in_grid, dtype=object)
 
-        print("--- Initializing grid...")
+        if DEBUG:
+            print("--- Initializing grid...")
         self.init_grid(problem_parameters)
 
     def init_grid(self, problem_parameters): 
@@ -54,7 +56,9 @@ class MAP_Elites:
         # nel nostro caso per adesso è un numero di epoche arbitrario (100)
         # TODO: aggiungere altri stopping criteria, 
         #   come ad esempio se nessuna soluzione migliora per un tot di epoche
-        print("--- Running MAP...")
+        if DEBUG:
+            print("--- Running MAP...")
+
         while not self.stopping_criteria_met():
             print(f"Running: {self.current_epoch}")
             # Select a cell in the grid based on some selection criteria
@@ -73,9 +77,10 @@ class MAP_Elites:
 
     def fitness_function(self, env_data):
         # execute environment with current ratio of melee and ranged units
-        print("Evaluating enviroment...")
+        if DEBUG:
+            print("Evaluating enviroment...")
         env = custom_combined_arms.env(env_data=env_data, render_mode='human')
-        fitness_score = random_demo(env, render=False, episodes=NUMBER_OF_EPISODES)
+        fitness_score = random_demo(env, render=False, episodes=self.number_of_episodes)
 
         return fitness_score
 
@@ -86,9 +91,9 @@ class MAP_Elites:
     def mutation_and_crossover(self, cell_index):
         env_data = self.solution_space_grid[cell_index][0]
         
-        if ALLOW_MUTATION:
+        if self.allow_mutation:
             env_data.mutate()
-        if ALLOW_CROSSOVER:
+        if self.allow_crossover:
             other_cell_index = self.select_cell()
             other_env_data = self.solution_space_grid[other_cell_index][0]
             env_data.crossover(other_env_data)
@@ -97,7 +102,7 @@ class MAP_Elites:
 
     def stopping_criteria_met(self):
         # Check if stopping criteria met
-        return self.current_epoch > NUMBER_OF_EPOCHS
+        return self.current_epoch > self.number_of_epochs
     
     def get_best_solutions(self):
         # Select the best solutions from each cell in the grid
