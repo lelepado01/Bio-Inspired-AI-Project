@@ -1,6 +1,12 @@
 
 import random
 
+class FormationType:
+    RANDOM = 0
+    DEFAULT = 1
+    SQUARE = 1
+    TRIANGLE = 2
+
 class EnvironmentData:
     def __init__(self, problem_parameters, cell_index):
         self.cell_index = cell_index
@@ -16,6 +22,8 @@ class EnvironmentData:
 
         self.number_of_melee = self.current_value
         self.number_of_ranged = self.total_agents - self.current_value
+
+        self.initial_formation = FormationType.RANDOM
 
     def mutate(self): 
         pass

@@ -12,7 +12,7 @@ LOG_DIRECTORY = "logs/"
 DEBUG = False
 
 class MAP_Elites: 
-    def __init__(self, problem_parameters):
+    def __init__(self, problem_parameters : ProblemParameters):
         # TODO: questi parametri vanno fatti meglio
         self.current_epoch = 0
         self.log_counter = 0
@@ -60,7 +60,8 @@ class MAP_Elites:
             print("--- Running MAP...")
 
         while not self.stopping_criteria_met():
-            print(f"Running: {self.current_epoch}")
+            if DEBUG:
+                print(f"Running: {self.current_epoch}")
             # Select a cell in the grid based on some selection criteria
             cell_index = self.select_cell()
             # Mutate the solution in the selected cell
@@ -76,16 +77,16 @@ class MAP_Elites:
             self.current_epoch += 1
 
     def fitness_function(self, env_data):
-        # execute environment with current ratio of melee and ranged units
         if DEBUG:
             print("Evaluating enviroment...")
+        # eseguiamo l'environemnt con i parametri passati, 
+        # che danno informazioni riguardo a numero di agenti e tipo di agenti
         env = custom_combined_arms.env(env_data=env_data, render_mode='human')
         fitness_score = random_demo(env, render=False, episodes=self.number_of_episodes)
 
         return fitness_score
 
     def select_cell(self):
-        # select random cell
         return random.randint(0, len(self.solution_space_grid)-1)
 
     def mutation_and_crossover(self, cell_index):
@@ -101,13 +102,10 @@ class MAP_Elites:
         return env_data
 
     def stopping_criteria_met(self):
-        # Check if stopping criteria met
         return self.current_epoch > self.number_of_epochs
     
     def get_best_solutions(self):
-        # Select the best solutions from each cell in the grid
-        best_solutions = [cell[0] for cell in self.solution_space_grid if cell is not None]
-        return best_solutions
+        return [cell[0] for cell in self.solution_space_grid if cell is not None]
     
     def log(self, file=None, as_plot=False): 
         if file is not None: 

@@ -52,7 +52,7 @@ random_demo(env, render=True, episodes=1)
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
 - [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
 - [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
-
+- [ ] testa che il salvataggio delle immagini mostri anche il numero di agenti per ogni tipo
 
 ## Useful links
 
