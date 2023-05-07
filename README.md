@@ -1,12 +1,12 @@
 # Bio-Inspired-AI-Project
 
-### Authors
+## Authors
 Noi
 
-### Description
+## Description
 Boh
 
-### Installation
+## Installation
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
@@ -39,7 +39,7 @@ random_demo(env, render=True, episodes=1)
 ```
 
 
-### TODOs
+## TODOs
 
 - [ ] Finish README.md file of the project CIAO
 - [x] visualizzazione della griglia del fitness (magari anche over time)
@@ -54,7 +54,7 @@ random_demo(env, render=True, episodes=1)
 - [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
 
 
-### Useful links
+## Useful links
 
 Paper del prof: 
 https://arxiv.org/abs/2208.12758
