@@ -75,6 +75,7 @@ def get_config(
     map_size,
     minimap_mode,
     seed,
+    env_data,
     step_reward,
     dead_penalty,
     attack_penalty,
@@ -213,12 +214,12 @@ def generate_map(env, map_size, handles, env_data):
 
     init_num = map_size * map_size * 0.04
 
-    if env_data == FormationType.RANDOM:
-        env.add_agents(handles[0], method="random", n=10)
-        env.add_agents(handles[1], method="random", n=10)
-        env.add_agents(handles[2], method="random", n=10)
-        env.add_agents(handles[3], method="random", n=10)
-    elif env_data == FormationType.DEFAULT:
+    if env_data.initial_formation == FormationType.RANDOM:
+        env.add_agents(handles[0], method="random", n=env_data.number_of_melee)
+        env.add_agents(handles[1], method="random", n=env_data.number_of_ranged)
+        env.add_agents(handles[2], method="random", n=env_data.number_of_melee)
+        env.add_agents(handles[3], method="random", n=env_data.number_of_ranged)
+    elif env_data.initial_formation == FormationType.DEFAULT:
         gap = 3
         # left
         n = init_num
@@ -289,7 +290,7 @@ class _parallel_env(magent_parallel_env, EzPickle):
         )
         assert map_size >= 16, "size of map must be at least 16"
         self.env_data = env_data
-        env = magent2.GridWorld(get_config(map_size, minimap_mode, seed, **reward_args))
+        env = magent2.GridWorld(get_config(map_size, minimap_mode, seed, env_data, **reward_args))
         reward_vals = np.array([KILL_REWARD] + list(reward_args.values()))
         reward_range = [
             np.minimum(reward_vals, 0).sum(),
