@@ -112,9 +112,13 @@ class MAP_Elites:
     def log(self, file=None, as_plot=False): 
         if file is not None: 
             if as_plot:
+                agent_count = [(i[0].melee_count, i[0].ranged_count) for i in self.solution_space_grid]
                 ls = np.array([[i[1] for i in self.solution_space_grid]])
 
                 plt.imshow(ls, cmap='hot', interpolation='nearest')
+                # TODO: testa che questo funzioni
+                plt.xticks(np.arange(len(agent_count)), agent_count)
+                
                 if self.log_counter == 0: 
                     plt.colorbar()
                 plt.savefig(LOG_DIRECTORY + file + "_"+ str(self.log_counter))
