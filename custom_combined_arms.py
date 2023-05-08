@@ -220,6 +220,8 @@ def generate_map(env, map_size, handles, env_data):
         env.add_agents(handles[2], method="random", n=env_data.number_of_melee)
         env.add_agents(handles[3], method="random", n=env_data.number_of_ranged)
     elif env_data.initial_formation == FormationType.DEFAULT:
+        # TODO: cambiare init_num con numero di melee e ranged
+        # però boh dobbiamo guardarlo meglio
         gap = 3
         # left
         n = init_num
@@ -259,6 +261,11 @@ def generate_map(env, map_size, handles, env_data):
 
         env.add_agents(handles[2], method="custom", pos=pos[0])
         env.add_agents(handles[3], method="custom", pos=pos[1])
+
+    # TODO: aggiungere altre formazioni, tipo quadrato o tutti melee davanti e archers dietro 
+    # per aggiungerle fai così:
+    # elif env_data.initial_formation == FormationType.SQUARE:
+    # (...)
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
