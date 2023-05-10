@@ -1,5 +1,6 @@
 
 import random
+from evolutionary_algorithm import EA_Config, MutationStrategy, CrossoverStrategy
 
 class FormationType:
     RANDOM = 0
@@ -25,8 +26,30 @@ class EnvironmentData:
 
         self.initial_formation = FormationType.RANDOM
 
+    # mantengo il valore corrente della cella all'interno dei limiti
+    def constrain_cell_value(self):
+        if self.current_value < self.cell_boundary_low:
+            self.current_value = self.cell_boundary_low
+        elif self.current_value > self.cell_boundary_high:
+            self.current_value = self.cell_boundary_high
+
     def mutate(self): 
-        pass
+        if EA_Config.MUTATION_STRATEGY == MutationStrategy.RANDOM:
+            self.current_value = random.randint(self.cell_boundary_low, self.cell_boundary_high)
+        elif EA_Config.MUTATION_STRATEGY == MutationStrategy.GAUSSIAN:
+            gauss_val = random.gauss(0, 1)
+            self.current_value = int(self.current_value + gauss_val)
+            self.constrain_cell_value()
+        else:
+            raise Exception("Invalid mutation strategy")
+
+        return self
 
     def crossover(self, other):
-        pass
+        if EA_Config.CROSSOVER_STRATEGY == CrossoverStrategy.MEAN:
+            self.current_value = (self.current_value + other.current_value * EA_Config.CROSSOVER_WEIGHT) // 2
+            self.constrain_cell_value()
+        else:
+            raise Exception("Invalid crossover strategy")
+
+        return self

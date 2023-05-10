@@ -7,31 +7,21 @@ from pettingzoo.utils import random_demo
 import custom_combined_arms
 from problem_params import ProblemParameters
 from environment_data import EnvironmentData
+from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy
 
 LOG_DIRECTORY = "logs/"
-DEBUG = False
+DEBUG = True
 
 class MAP_Elites: 
     def __init__(self, problem_parameters : ProblemParameters):
-        # TODO: questi parametri vanno fatti meglio
         self.current_epoch = 0
         self.log_counter = 0
-        self.num_dimensions = 1
-        self.cells_in_grid = problem_parameters.cells_in_grid
-        self.total_agents = problem_parameters.total_agents
 
         #setting of problem parameters as self
-        self.allow_mutation = problem_parameters.allow_mutation
-        self.allow_crossover = problem_parameters.allow_crossover
+        self.cells_in_grid = problem_parameters.cells_in_grid
+        #self.total_agents = problem_parameters.total_agents
         self.number_of_episodes = problem_parameters.number_of_episodes
         self.number_of_epochs = problem_parameters.number_of_epochs
-
-        # range di valori per EnvironmentData,
-        # dicono che non possiamo avere 51 melee se ci sono al max 
-        # 50 unità totali per team
-        # TODO: integrare questo nella classe EnvironmentData e non qui
-        self.cell_dimension = self.total_agents // self.cells_in_grid
-        self.cell_boundaries = [i * self.cell_dimension for i in range(self.cells_in_grid)]
 
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
@@ -61,7 +51,7 @@ class MAP_Elites:
 
         while not self.stopping_criteria_met():
             if DEBUG:
-                print(f"Running: {self.current_epoch}")
+                print(f"Running epoch: {self.current_epoch}")
             # Select a cell in the grid based on some selection criteria
             cell_index = self.select_cell()
             # Mutate the solution in the selected cell
@@ -71,6 +61,8 @@ class MAP_Elites:
             # Aggiorniamo la soluzione nella griglia 
             # solo se la fitness è migliore
             if fitness > self.solution_space_grid[cell_index][1]:
+                if DEBUG: 
+                    print(f"New best fitness: {fitness} in cell {cell_index}")
                 self.solution_space_grid[cell_index] = (mutated_solution, fitness)
 
             self.log("test", as_plot=True)
@@ -86,18 +78,46 @@ class MAP_Elites:
 
         return fitness_score
 
-    def select_cell(self):
-        return random.randint(0, len(self.solution_space_grid)-1)
+    def select_cell(self, cell_index=None):
+        if EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM: 
+            while True: # necessario per evitare che venga selezionata la stessa cella
+                random_index = random.randint(0, len(self.solution_space_grid)-1)
+                if random_index != cell_index:
+                    return random_index
+        elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.ADJACENT:
+            if cell_index is not None:
+                if cell_index == 0:
+                    return cell_index + 1
+                elif cell_index == len(self.solution_space_grid)-1:
+                    return cell_index - 1
+                else:
+                    return cell_index + random.choice([-1, 1])
+            else:
+                return random.randint(0, len(self.solution_space_grid)-1)
+        elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.BEST:
+            # se ho già selezionato una cella, seleziono la migliore tra le altre
+            if cell_index is not None: 
+                values = [cell[1] for cell in self.solution_space_grid]
+                values[cell_index] = -1
+                return np.argmax(values)
+            # altrimenti seleziono la migliore tra tutte
+            else: 
+                return np.argmax([cell[1] for cell in self.solution_space_grid])
+        else: 
+            raise Exception("Invalid crossover selection strategy")
+            
+
 
     def mutation_and_crossover(self, cell_index):
         env_data = self.solution_space_grid[cell_index][0]
         
-        if self.allow_mutation:
-            env_data.mutate()
-        if self.allow_crossover:
-            other_cell_index = self.select_cell()
+        if EA_Config.ALLOW_MUTATION:
+            env_data = env_data.mutate()
+
+        if EA_Config.ALLOW_CROSSOVER:
+            other_cell_index = self.select_cell(cell_index=cell_index)
             other_env_data = self.solution_space_grid[other_cell_index][0]
-            env_data.crossover(other_env_data)
+            env_data = env_data.crossover(other_env_data)
 
         return env_data
 
@@ -113,15 +133,18 @@ class MAP_Elites:
                 agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in self.solution_space_grid]
                 ls = np.array([[i[1] for i in self.solution_space_grid]])
 
-                plt.imshow(ls, cmap='hot', interpolation='nearest', )
+                plt.clf()
+                plt.imshow(ls, cmap='hot', interpolation='nearest')
                 plt.xlabel("(Number of Melee, Number of Ranged)")
                 plt.xticks(np.arange(len(agent_count)), agent_count)
 
-                for i in range(len(ls)):
-                    plt.text(i, 0, str(ls[i]), ha="center", va="center", color="w")
+                for i in range(len(ls[0])):
+                    color = "w"
+                    if ls[0][i] == max([v for v in ls[0]]):
+                        color = "black"
+                    plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
                 
-                if self.log_counter == 0: 
-                    plt.colorbar()
+                # plt.colorbar()
                 plt.savefig(LOG_DIRECTORY + file + "_"+ str(self.log_counter))
                 self.log_counter += 1
             else: 
