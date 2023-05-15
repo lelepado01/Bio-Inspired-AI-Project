@@ -22,9 +22,16 @@ class CrossoverSelectionStrategy:
     RANDOM = 0
     # seleziono cella adiacente
     ADJACENT = 1
-    # seleziono cella con valore più alto
+    # seleziono sempre cella con valore più alto
     BEST = 2
+    # seleziono cella con probabilità basata sul valore fitness
+    GAUSSIAN_BEST = 3
 
+
+class FormationType:
+    RANDOM = 0
+    DEFAULT = 1
+    SQUARE = 1
 
 
 class EA_Config: 
@@ -40,4 +47,7 @@ class EA_Config:
     CROSSOVER_WEIGHT = 0.2
 
     ### --- parametri di selezione ---
-    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.RANDOM
+    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.GAUSSIAN_BEST
+
+    ### --- parametri di simulazione ---
+    INITIAL_FORMATION_TYPE = FormationType.RANDOM

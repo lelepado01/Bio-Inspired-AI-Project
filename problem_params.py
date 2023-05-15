@@ -1,5 +1,4 @@
 
-
 class ProblemParameters: 
     def __init__(self) -> None:
         self.total_agents = 100

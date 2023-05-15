@@ -6,7 +6,7 @@ from pettingzoo.utils.conversions import parallel_to_aec_wrapper
 import magent2
 from magent2.environments.magent_env import magent_parallel_env, make_env
 
-from environment_data import FormationType
+from evolutionary_algorithm import EA_Config, FormationType
 
 default_map_size = 45
 max_cycles_default = 1000
@@ -214,12 +214,12 @@ def generate_map(env, map_size, handles, env_data):
 
     init_num = map_size * map_size * 0.04
 
-    if env_data.initial_formation == FormationType.RANDOM:
+    if EA_Config.INITIAL_FORMATION_TYPE == FormationType.RANDOM:
         env.add_agents(handles[0], method="random", n=env_data.number_of_melee)
         env.add_agents(handles[1], method="random", n=env_data.number_of_ranged)
         env.add_agents(handles[2], method="random", n=env_data.number_of_melee)
         env.add_agents(handles[3], method="random", n=env_data.number_of_ranged)
-    elif env_data.initial_formation == FormationType.DEFAULT:
+    elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.DEFAULT:
         # TODO: cambiare init_num con numero di melee e ranged
         # però boh dobbiamo guardarlo meglio
         gap = 3
@@ -264,7 +264,7 @@ def generate_map(env, map_size, handles, env_data):
 
     # TODO: aggiungere altre formazioni, tipo quadrato o tutti melee davanti e archers dietro 
     # per aggiungerle fai così:
-    # elif env_data.initial_formation == FormationType.SQUARE:
+    # elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.SQUARE:
     # (...)
 
 class _parallel_env(magent_parallel_env, EzPickle):
