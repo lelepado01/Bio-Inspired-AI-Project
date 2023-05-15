@@ -79,30 +79,57 @@ class MAP_Elites:
         return fitness_score
 
     def select_cell(self, cell_index=None):
+        if DEBUG:
+            print(f"Selecting cell with selection strategy: {EA_Config.CROSSOVER_SELECTION_STRATEGY}")
+
         if EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM: 
             while True: # necessario per evitare che venga selezionata la stessa cella
                 random_index = random.randint(0, len(self.solution_space_grid)-1)
                 if random_index != cell_index:
+                    if DEBUG:
+                        print(f"Selected cell: {random_index}")
                     return random_index
         elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.ADJACENT:
+            selected_index = None
             if cell_index is not None:
                 if cell_index == 0:
-                    return cell_index + 1
+                    selected_index = cell_index + 1
                 elif cell_index == len(self.solution_space_grid)-1:
-                    return cell_index - 1
+                    selected_index = cell_index - 1
                 else:
-                    return cell_index + random.choice([-1, 1])
+                    selected_index = cell_index + random.choice([-1, 1])
             else:
-                return random.randint(0, len(self.solution_space_grid)-1)
+                selected_index = random.randint(0, len(self.solution_space_grid)-1)
+
+            if DEBUG:
+                print(f"Selected cell: {selected_index}")
+            return selected_index
+        
         elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.BEST:
             # se ho già selezionato una cella, seleziono la migliore tra le altre
+            selected_index = None
+            values = [cell[1] for cell in self.solution_space_grid]
             if cell_index is not None: 
-                values = [cell[1] for cell in self.solution_space_grid]
-                values[cell_index] = -1
-                return np.argmax(values)
-            # altrimenti seleziono la migliore tra tutte
-            else: 
-                return np.argmax([cell[1] for cell in self.solution_space_grid])
+                values[cell_index] = -10000000000
+
+            selected_index = np.argmax(values)
+            if DEBUG:
+                print(f"Selected cell: {selected_index}")
+            return selected_index
+            
+        elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.GAUSSIAN_BEST:    
+            # se ho già selezionato una cella, seleziono la migliore tra le altre
+            probs = [abs(cell[1]) for cell in self.solution_space_grid]
+            if cell_index is not None: 
+                # tolgo la cella già scelta
+                probs[cell_index] = 0.0
+            probs /= np.sum(probs)
+
+            selected_index = np.random.choice(len(probs), p=probs)
+            if DEBUG:
+                print(f"Selected cell: {selected_index}")
+            return selected_index
+            
         else: 
             raise Exception("Invalid crossover selection strategy")
             

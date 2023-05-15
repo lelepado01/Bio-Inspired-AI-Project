@@ -1,7 +1,10 @@
 # Bio-Inspired-AI-Project
 
 ## Authors
-Noi
+
+Gabriele Padovani ```229207```
+
+Nadia Benini ```??????```
 
 ## Description
 Boh
@@ -41,18 +44,20 @@ random_demo(env, render=True, episodes=1)
 
 ## TODOs
 
-- [ ] Finish README.md file of the project CIAO
 - [x] visualizzazione della griglia del fitness (magari anche over time)
 - [x] capire se si possono passare tutti i parametri alla funzione env
-- [ ] fare la parte dell'enviroment
 - [x] passare parametri della simulazione in una sola classe
 - [x] spostare consts e metterle come parametri dell'algoritmo, vanno spostati nella classe e decisi nel main
-- [ ] espandere a più dimensioni (credo almeno due)
-- [ ] funzioni di mutation e crossover in environment_data.py
+- [x] funzioni di mutation e crossover in environment_data.py
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
 - [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
+- [ ] Fare descrizione del progetto su README.md
+- [ ] testa che il salvataggio delle immagini e a file di testo funzioni (soprattutto la seconda, non l'ho testato)
+- [ ] Implementare altri tipi di crossover
+- [ ] Provare a parallelizzare l'algoritmo usando il CLUSTER Siiiiiii
+- [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
 - [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
-- [ ] testa che il salvataggio delle immagini mostri anche il numero di agenti per ogni tipo
+- [ ] espandere a più dimensioni (credo almeno due)
 
 ## Useful links
 
@@ -68,4 +73,4 @@ https://arxiv.org/pdf/2104.03936.pdf
 
 Magent2 (andrà citato sicuro): 
 https://github.com/Farama-Foundation/MAgent2
-//ciao
+

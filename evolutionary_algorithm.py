@@ -6,7 +6,7 @@ class MutationStrategy:
     RANDOM = 0
     # prendo un valore random da una distribuzione gaussiana
     # e lo aggiungo al valore corrente della cella
-    # facendo attenzione ceh non esca dai limiti della cella
+    # facendo attenzione che non esca dai limiti della cella
     GAUSSIAN = 1
 
 # TODO: implementare altri tipi di crossover
@@ -16,7 +16,6 @@ class CrossoverStrategy:
     # in modo da non fare uscire il valore della prima cella dai limiti
     MEAN = 0
 
-# TODO: implementare altri tipi di selezione
 class CrossoverSelectionStrategy:
     # seleziono cella a random
     RANDOM = 0
@@ -47,7 +46,7 @@ class EA_Config:
     CROSSOVER_WEIGHT = 0.2
 
     ### --- parametri di selezione ---
-    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.GAUSSIAN_BEST
+    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.BEST
 
     ### --- parametri di simulazione ---
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
