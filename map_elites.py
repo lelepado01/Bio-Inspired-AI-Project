@@ -8,18 +8,17 @@ import custom_combined_arms
 from problem_params import ProblemParameters
 from environment_data import EnvironmentData
 from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy
+from logger import Logger
 
-LOG_DIRECTORY = "logs/"
 DEBUG = True
 
 class MAP_Elites: 
     def __init__(self, problem_parameters : ProblemParameters):
         self.current_epoch = 0
-        self.log_counter = 0
+        self.logger = Logger("map_elites_log.txt")
 
         #setting of problem parameters as self
         self.cells_in_grid = problem_parameters.cells_in_grid
-        #self.total_agents = problem_parameters.total_agents
         self.number_of_episodes = problem_parameters.number_of_episodes
         self.number_of_epochs = problem_parameters.number_of_epochs
 
@@ -65,8 +64,10 @@ class MAP_Elites:
                     print(f"New best fitness: {fitness} in cell {cell_index}")
                 self.solution_space_grid[cell_index] = (mutated_solution, fitness)
 
-            self.log("test", as_plot=True)
+            self.logger.to_plot_2d(self.solution_space_grid)
             self.current_epoch += 1
+
+        self.logger.close()
 
     def fitness_function(self, env_data):
         if DEBUG:
@@ -127,34 +128,4 @@ class MAP_Elites:
     def get_best_solutions(self):
         return [cell[0] for cell in self.solution_space_grid if cell is not None]
     
-    def log(self, file=None, as_plot=False): 
-        if file is not None: 
-            if as_plot:
-                agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in self.solution_space_grid]
-                ls = np.array([[i[1] for i in self.solution_space_grid]])
 
-                plt.clf()
-                plt.imshow(ls, cmap='hot', interpolation='nearest')
-                plt.xlabel("(Number of Melee, Number of Ranged)")
-                plt.xticks(np.arange(len(agent_count)), agent_count)
-
-                for i in range(len(ls[0])):
-                    color = "w"
-                    if ls[0][i] == max([v for v in ls[0]]):
-                        color = "black"
-                    plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
-                
-                # plt.colorbar()
-                plt.savefig(LOG_DIRECTORY + file + "_"+ str(self.log_counter))
-                self.log_counter += 1
-            else: 
-                f = open(LOG_DIRECTORY + file, "+a")
-                f.write("[")
-                for i in self.solution_space_grid: 
-                    f.write(f"|{round(i[1], 2)}|")
-                f.write("]\n")
-        else: 
-            print("[", end="")
-            for i in self.solution_space_grid: 
-                print(f"|{round(i[1], 2)}|", end=" ")
-            print("]")
