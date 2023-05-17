@@ -61,6 +61,12 @@ random_demo(env, render=True, episodes=1)
 - [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
 - [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
 - [ ] espandere a più dimensioni (credo almeno due)
+- [ ] iniziare a fare qualche test 
+    - [ ] decidere quante epoche, quanti agenti, i parametri...
+    - [ ] magari facciamo un'altra sezione nel readme in cui metta i risultati dei test
+    - [ ] e motiviamo perchè abbiamo scelto quei parametri
+- [ ] fare un po' di grafici
+- [ ] provare a fare un sistema che salvi il video della battaglia finale
 
 ## Useful links
 
