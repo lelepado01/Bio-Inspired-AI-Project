@@ -29,7 +29,9 @@ Only the *magent2* folder is necessary
 
 Go to the source folder of the library and copy the files into the magent2 folder of the library installed with pip (this path can be found with the command ```pip show magent2```)
 
-#### 4. Test the library
+#### 4. Correct Runtime Error in MAgent2 
+
+#### 5. Test the library
 
 Run the following code to test the library:
 
@@ -51,6 +53,7 @@ random_demo(env, render=True, episodes=1)
 - [x] funzioni di mutation e crossover in environment_data.py
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
 - [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
+- [ ] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
 - [ ] testa che il salvataggio delle immagini e a file di testo funzioni (soprattutto la seconda, non l'ho testato)
 - [ ] Implementare altri tipi di crossover
