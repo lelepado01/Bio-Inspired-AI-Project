@@ -2,13 +2,13 @@
 import random
 from evolutionary_algorithm import EA_Config, MutationStrategy, CrossoverStrategy
 
-class EnvironmentData:
-    def __init__(self, problem_parameters, cell_index):
+class MapElitesCell:
+    def __init__(self, cell_index):
         self.cell_index = cell_index
 
         self.num_dimensions = 1
-        self.cells_in_grid = problem_parameters.cells_in_grid
-        self.total_agents = problem_parameters.total_agents
+        self.cells_in_grid = EA_Config.CELLS_IN_GRID
+        self.total_agents = EA_Config.TOTAL_NUMBER_OF_AGENTS
         
         self.cell_dimension = self.total_agents // self.cells_in_grid
         self.cell_boundary_low = self.cell_index * self.cell_dimension

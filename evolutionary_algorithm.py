@@ -57,6 +57,16 @@ class EA_Config:
 
     ### --- parametri di stopping criteria ---
     STOPPING_CRITERIA = StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT
+    MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 5
+    CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
     ### --- parametri di simulazione ---
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
+
+    ### --- parametri di simulazione ---
+    MAX_NUMBER_OF_EPISODES = 1
+    MAX_NUMBER_OF_EPOCHS = 20
+    
+    TOTAL_NUMBER_OF_AGENTS = 100
+    AGENT_CLASSES = 2
+    CELLS_IN_GRID = 5

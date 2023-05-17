@@ -4,51 +4,38 @@ import random
 from pettingzoo.utils import random_demo
 
 import custom_combined_arms
-from problem_params import ProblemParameters
-from environment_data import EnvironmentData
+from map_elites_cell import MapElitesCell
 from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy, StoppingCriteria
 from logger import Logger
 
 DEBUG = True
 
 class MAP_Elites: 
-    def __init__(self, problem_parameters : ProblemParameters):
+    def __init__(self):
         self.current_epoch = 0
         self.logger = Logger("map_elites_log.txt")
-
-        #setting of problem parameters as self
-        self.cells_in_grid = problem_parameters.cells_in_grid
-        self.number_of_episodes = problem_parameters.number_of_episodes
-        self.max_number_of_epochs = problem_parameters.number_of_epochs
-
-        # sono usati solo se lo stopping criteria è GENERATIONS_WITHOUT_IMPROVEMENT
-        self.max_number_of_epochs_without_improvement = problem_parameters.number_of_epochs_without_improvement
-        self.epochs_without_improvement = 0
 
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
         # dove enviroment data è il "genotipo" (ex. 5 melee e 5 ranged)
         # TODO: da espandere a più dimensioni (credo almeno due)
-        self.solution_space_grid = np.empty(self.cells_in_grid, dtype=object)
-        self.best_solutions = np.empty(self.cells_in_grid, dtype=object)
+        self.solution_space_grid = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
+        self.old_best_fitnesses = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
 
         if DEBUG:
             print("--- Initializing grid...")
-        self.init_grid(problem_parameters)
+        self.init_grid()
+        self.old_best_fitnesses = self.get_best_fitness()
 
-    def init_grid(self, problem_parameters): 
-        for i in range(self.cells_in_grid):
-            envdata = EnvironmentData(problem_parameters, i)
+    def init_grid(self): 
+        for i in range(EA_Config.CELLS_IN_GRID):
+            envdata = MapElitesCell(i)
             # e passiamo questa soluzione nel giochino per vedere come performa, 
             # restituisce direttamente il total_reward, quello che dobbiamo massimizzare
             fitness = self.fitness_function(envdata)
             self.solution_space_grid[i] = (envdata, fitness)
 
     def run(self): 
-        # Mutate and repeat until stopping criteria met
-        # nel nostro caso per adesso è un numero di epoche arbitrario (100)
-        # TODO: aggiungere altri stopping criteria, 
-        #   come ad esempio se nessuna soluzione migliora per un tot di epoche
         if DEBUG:
             print("--- Running MAP...")
 
@@ -82,8 +69,7 @@ class MAP_Elites:
         # eseguiamo l'environemnt con i parametri passati, 
         # che danno informazioni riguardo a numero di agenti e tipo di agenti
         env = custom_combined_arms.env(env_data=env_data, render_mode='human')
-        fitness_score = random_demo(env, render=False, episodes=self.number_of_episodes)
-
+        fitness_score = random_demo(env, render=False, episodes=EA_Config.MAX_NUMBER_OF_EPISODES)
         return fitness_score
 
     def select_cell(self, cell_index=None):
@@ -143,45 +129,48 @@ class MAP_Elites:
             
 
     def mutation_and_crossover(self, cell_index):
-        env_data = self.solution_space_grid[cell_index][0]
+        selected_cell = self.solution_space_grid[cell_index][0]
         
         if EA_Config.ALLOW_MUTATION:
-            env_data = env_data.mutate()
+            selected_cell = selected_cell.mutate()
 
         if EA_Config.ALLOW_CROSSOVER:
             other_cell_index = self.select_cell(cell_index=cell_index)
             other_env_data = self.solution_space_grid[other_cell_index][0]
-            env_data = env_data.crossover(other_env_data)
+            selected_cell = selected_cell.crossover(other_env_data)
 
-        return env_data
+        return selected_cell
 
     def stopping_criteria_met(self):
 
         if EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS:
             if DEBUG:
                 print("Max number of epochs reached")
-            return self.current_epoch > self.max_number_of_epochs
+            return self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS
         
         elif EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT: 
-            if self.current_epoch > self.max_number_of_epochs: # se abbiamo superato il numero massimo di epoche allora stoppiamo
+            if self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS: # se abbiamo superato il numero massimo di epoche allora stoppiamo
                 if DEBUG:
                     print("Max number of epochs reached")
                 return True
             else: # se non ci sono soluzioni migliori da almeno 10 epoche allora stoppiamo
-                best_solutions = self.get_best_solutions()
+                current_best_fitnesses = self.get_best_fitness()
 
-                if all([x >= y for x, y in zip(self.best_solutions, best_solutions)]):
-                    self.epochs_without_improvement += 1
+                if all([x >= y for x, y in zip(self.old_best_fitnesses, current_best_fitnesses)]):
+                    EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT += 1
                 else:
-                    self.epochs_without_improvement = 0
+                    EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
-                self.best_solutions = best_solutions
+                self.old_best_fitnesses = current_best_fitnesses
 
                 if DEBUG:
-                    print(f"Epochs without improvement: {self.epochs_without_improvement}")
-                return self.epochs_without_improvement > self.max_number_of_epochs_without_improvement
+                    print(f"Epochs without improvement: {EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT}")
+                return EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT > EA_Config.MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT
     
     def get_best_solutions(self):
         return [cell[0] for cell in self.solution_space_grid if cell is not None]
+    
+    def get_best_fitness(self):
+        return [cell[1] for cell in self.solution_space_grid if cell is not None]
     
 
