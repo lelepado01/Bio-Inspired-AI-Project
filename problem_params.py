@@ -6,3 +6,4 @@ class ProblemParameters:
         self.cells_in_grid = 5
         self.number_of_episodes = 1
         self.number_of_epochs = 20
+        self.number_of_epochs_without_improvement = 5

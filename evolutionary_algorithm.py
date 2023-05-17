@@ -26,11 +26,18 @@ class CrossoverSelectionStrategy:
     # seleziono cella con probabilità basata sul valore fitness
     GAUSSIAN_BEST = 3
 
+class StoppingCriteria:
+    # fermo l'algoritmo dopo un numero di generazioni
+    GENERATIONS = 0
+    # fermo l'algoritmo dopo un numero di generazioni senza miglioramenti
+    # (o dopo un numero di generazioni arbitrario)
+    GENERATIONS_WITHOUT_IMPROVEMENT = 1
 
+# formazione iniziale degli agenti sulla mappa
 class FormationType:
     RANDOM = 0
     DEFAULT = 1
-    SQUARE = 1
+    SQUARE = 2
 
 
 class EA_Config: 
@@ -47,6 +54,9 @@ class EA_Config:
 
     ### --- parametri di selezione ---
     CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.BEST
+
+    ### --- parametri di stopping criteria ---
+    STOPPING_CRITERIA = StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT
 
     ### --- parametri di simulazione ---
     INITIAL_FORMATION_TYPE = FormationType.RANDOM

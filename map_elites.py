@@ -6,7 +6,7 @@ from pettingzoo.utils import random_demo
 import custom_combined_arms
 from problem_params import ProblemParameters
 from environment_data import EnvironmentData
-from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy
+from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy, StoppingCriteria
 from logger import Logger
 
 DEBUG = True
@@ -19,13 +19,18 @@ class MAP_Elites:
         #setting of problem parameters as self
         self.cells_in_grid = problem_parameters.cells_in_grid
         self.number_of_episodes = problem_parameters.number_of_episodes
-        self.number_of_epochs = problem_parameters.number_of_epochs
+        self.max_number_of_epochs = problem_parameters.number_of_epochs
+
+        # sono usati solo se lo stopping criteria è GENERATIONS_WITHOUT_IMPROVEMENT
+        self.max_number_of_epochs_without_improvement = problem_parameters.number_of_epochs_without_improvement
+        self.epochs_without_improvement = 0
 
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
         # dove enviroment data è il "genotipo" (ex. 5 melee e 5 ranged)
         # TODO: da espandere a più dimensioni (credo almeno due)
         self.solution_space_grid = np.empty(self.cells_in_grid, dtype=object)
+        self.best_solutions = np.empty(self.cells_in_grid, dtype=object)
 
         if DEBUG:
             print("--- Initializing grid...")
@@ -47,7 +52,7 @@ class MAP_Elites:
         if DEBUG:
             print("--- Running MAP...")
 
-        while not self.stopping_criteria_met():
+        while True:
             if DEBUG:
                 print(f"Running epoch: {self.current_epoch}")
             # Select a cell in the grid based on some selection criteria
@@ -65,6 +70,9 @@ class MAP_Elites:
 
             self.logger.to_plot_2d(self.solution_space_grid)
             self.current_epoch += 1
+            # stop loop if stopping criteria met
+            if self.stopping_criteria_met():
+                break
 
         self.logger.close()
 
@@ -134,7 +142,6 @@ class MAP_Elites:
             raise Exception("Invalid crossover selection strategy")
             
 
-
     def mutation_and_crossover(self, cell_index):
         env_data = self.solution_space_grid[cell_index][0]
         
@@ -149,7 +156,30 @@ class MAP_Elites:
         return env_data
 
     def stopping_criteria_met(self):
-        return self.current_epoch > self.number_of_epochs
+
+        if EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS:
+            if DEBUG:
+                print("Max number of epochs reached")
+            return self.current_epoch > self.max_number_of_epochs
+        
+        elif EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT: 
+            if self.current_epoch > self.max_number_of_epochs: # se abbiamo superato il numero massimo di epoche allora stoppiamo
+                if DEBUG:
+                    print("Max number of epochs reached")
+                return True
+            else: # se non ci sono soluzioni migliori da almeno 10 epoche allora stoppiamo
+                best_solutions = self.get_best_solutions()
+
+                if all([x >= y for x, y in zip(self.best_solutions, best_solutions)]):
+                    self.epochs_without_improvement += 1
+                else:
+                    self.epochs_without_improvement = 0
+
+                self.best_solutions = best_solutions
+
+                if DEBUG:
+                    print(f"Epochs without improvement: {self.epochs_without_improvement}")
+                return self.epochs_without_improvement > self.max_number_of_epochs_without_improvement
     
     def get_best_solutions(self):
         return [cell[0] for cell in self.solution_space_grid if cell is not None]

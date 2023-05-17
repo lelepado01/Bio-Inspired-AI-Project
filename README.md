@@ -43,7 +43,6 @@ env = battle_v4.env(render_mode='human')
 random_demo(env, render=True, episodes=1)
 ```
 
-
 ## TODOs
 
 - [x] visualizzazione della griglia del fitness (magari anche over time)
