@@ -10,6 +10,8 @@ class Logger():
 
     def __init__(self, filename):
         self.file = open(LOG_DIRECTORY + filename, "+a")
+        self.primary_fitnesses = []
+        self.adversarial_fitnesses = []
         self.log_counter = 0
 
     def log(self, epoch, loss, accuracy):
@@ -61,3 +63,19 @@ class Logger():
         for i in grid: 
             print(f"|{round(i[1], 2)}|", end=" ")
         print("]")
+
+    def add_primary_fitness(self, fitness):
+        self.primary_fitnesses.append(fitness)
+
+    def add_adversarial_fitness(self, fitness):
+        self.adversarial_fitnesses.append(fitness)
+
+    def plot_fitness(self, label=""):
+        plt.clf()
+        plt.plot(self.primary_fitnesses, label="Primary Fitness")
+        if len(self.adversarial_fitnesses) > 0:
+            plt.plot(self.adversarial_fitnesses, label="Adversarial Fitness")
+        plt.xlabel("Epoch")
+        plt.ylabel("Fitness")
+        plt.legend()
+        plt.savefig(LOG_DIRECTORY + label + "_fitness.png")

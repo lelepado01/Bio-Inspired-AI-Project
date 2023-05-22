@@ -64,20 +64,27 @@ class MAP_Elites:
             if modified_cell is not None:
                 self.primary_grid[index] = modified_cell
             self.logger.to_plot_2d(self.primary_grid, label="primary")
+            self.logger.add_primary_fitness(max(self.get_best_fitness(self.primary_grid)))
 
             if EA_Config.USE_ADVERSARIAL_GRID:
                 modified_cell, index = self.run_iteration_on_grid(self.adversarial_grid)
                 if modified_cell is not None:
                     self.adversarial_grid[index] = modified_cell
                 self.logger.to_plot_2d(self.adversarial_grid, label="adversarial")
+                self.logger.add_adversarial_fitness(max(self.get_best_fitness(self.primary_grid)))
+
 
             self.current_epoch += 1
 
             if self.stopping_criteria_met():
-                print("Best fitnesses: ")
+                print("Best primary fitnesses: ")
                 print(self.get_best_fitness(self.primary_grid))
+                if EA_Config.USE_ADVERSARIAL_GRID:
+                    print("Best adversarial fitnesses: ")
+                    print(self.get_best_fitness(self.adversarial_grid))
                 break
-
+        
+        self.logger.plot_fitness()
         self.logger.close()
 
     def fitness_function(self, env_data):
@@ -157,7 +164,7 @@ class MAP_Elites:
         if EA_Config.ALLOW_CROSSOVER:
             other_cell_index = self.select_cell(cell_index=cell_index)
             other_env_data = self.primary_grid[other_cell_index][0]
-            
+
             old_cell = selected_cell
             selected_cell.crossover(other_env_data)
             if DEBUG and old_cell != selected_cell:

@@ -44,7 +44,7 @@ class EA_Config:
     ### --- parametri generali ---
     ALLOW_MUTATION = True
     ALLOW_CROSSOVER = True
-    USE_ADVERSARIAL_GRID = True
+    USE_ADVERSARIAL_GRID = False
 
     ### --- parametri di mutation ---
     MUTATION_STRATEGY = MutationStrategy.RANDOM

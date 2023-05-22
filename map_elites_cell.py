@@ -15,8 +15,7 @@ class MapElitesCell:
         self.cell_boundary_high = (self.cell_index+1) * self.cell_dimension - 1
         self.current_value = random.randint(self.cell_boundary_low, self.cell_boundary_high)
 
-        self.number_of_melee = self.current_value
-        self.number_of_ranged = self.total_agents - self.current_value
+        self.update_agent_numbers()
 
     # mantengo il valore corrente della cella all'interno dei limiti
     def constrain_cell_value(self):
@@ -26,8 +25,8 @@ class MapElitesCell:
             self.current_value = self.cell_boundary_high
 
     def update_agent_numbers(self):
-        self.number_of_melee = self.current_value
-        self.number_of_ranged = self.total_agents - self.current_value
+        self.number_of_melee = int(self.current_value)
+        self.number_of_ranged = int(self.total_agents - self.current_value)
 
     def mutate(self): 
         if EA_Config.MUTATION_STRATEGY == MutationStrategy.RANDOM:
