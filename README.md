@@ -58,7 +58,7 @@ random_demo(env, render=True, episodes=1)
 - [ ] Implementare altri tipi di crossover
 - [ ] Provare a parallelizzare l'algoritmo usando il CLUSTER Siiiiiii
 - [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
-- [ ] magari si puù fare più di un algoritmo... non sembra così tanto lavoro
+- [ ] magari si può fare più di un algoritmo... non sembra così tanto lavoro (ANCHE NO)
 - [ ] espandere a più dimensioni (credo almeno due)
 - [ ] iniziare a fare qualche test 
     - [ ] decidere quante epoche, quanti agenti, i parametri...

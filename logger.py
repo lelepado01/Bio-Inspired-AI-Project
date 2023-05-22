@@ -18,12 +18,12 @@ class Logger():
     def close(self):
         self.file.close()
 
-    def to_plot_2d(self, grid): 
+    def to_plot_2d(self, grid, label=""): 
         agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in grid]
         ls = np.array([[i[1] for i in grid]])
 
         plt.clf()
-        plt.imshow(ls, cmap='hot', interpolation='nearest')
+        plt.imshow(ls, cmap='hot', interpolation='nearest', vmin=-4000, vmax=4000)
         plt.xlabel("(Number of Melee, Number of Ranged)")
         plt.xticks(np.arange(len(agent_count)), agent_count)
 
@@ -32,10 +32,10 @@ class Logger():
             plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
         
         plt.colorbar()
-        plt.savefig(LOG_DIRECTORY + PLT2D + "epoch_"+ str(self.log_counter))
+        plt.savefig(LOG_DIRECTORY + PLT2D + label + "_epoch_"+ str(self.log_counter))
         self.log_counter += 1
 
-    def to_plot_3d(self, grid):
+    def to_plot_3d(self, grid, label=""):
         agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in grid]
         ls = [-i[1] for i in grid]
 
@@ -46,7 +46,7 @@ class Logger():
         plt.xlabel("(Number of Melee, Number of Ranged)")
         plt.xticks(np.arange(len(agent_count)), agent_count)
 
-        plt.savefig(LOG_DIRECTORY + PLT3D + "epoch_"+ str(self.log_counter))
+        plt.savefig(LOG_DIRECTORY + PLT3D + label + "_epoch_"+ str(self.log_counter))
         self.log_counter += 1
 
 

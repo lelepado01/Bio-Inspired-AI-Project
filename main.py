@@ -11,7 +11,5 @@ def main():
     algorithm = MAP_Elites()
     algorithm.run()
 
-    print("Best solution: ", algorithm.get_best_solutions())
-
 if __name__ == "__main__":
     main()

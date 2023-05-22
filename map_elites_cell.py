@@ -25,17 +25,23 @@ class MapElitesCell:
         elif self.current_value > self.cell_boundary_high:
             self.current_value = self.cell_boundary_high
 
+    def update_agent_numbers(self):
+        self.number_of_melee = self.current_value
+        self.number_of_ranged = self.total_agents - self.current_value
+
     def mutate(self): 
         if EA_Config.MUTATION_STRATEGY == MutationStrategy.RANDOM:
-            self.current_value = random.randint(self.cell_boundary_low, self.cell_boundary_high)
+            val = random.randint(self.cell_boundary_low, self.cell_boundary_high)
+            print("Mutated cell: ", val, " from ", self.current_value)
+            self.current_value = val
         elif EA_Config.MUTATION_STRATEGY == MutationStrategy.GAUSSIAN:
-            gauss_val = random.gauss(0, 1)
+            gauss_val = random.gauss(0, 1) * (self.cell_boundary_high - self.cell_boundary_low)
             self.current_value = int(self.current_value + gauss_val)
             self.constrain_cell_value()
         else:
             raise Exception("Invalid mutation strategy")
-
-        return self
+        
+        self.update_agent_numbers()
 
     def crossover(self, other):
         if EA_Config.CROSSOVER_STRATEGY == CrossoverStrategy.MEAN:
@@ -43,5 +49,5 @@ class MapElitesCell:
             self.constrain_cell_value()
         else:
             raise Exception("Invalid crossover strategy")
-
-        return self
+        
+        self.update_agent_numbers()

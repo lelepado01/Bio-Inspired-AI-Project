@@ -44,6 +44,7 @@ class EA_Config:
     ### --- parametri generali ---
     ALLOW_MUTATION = True
     ALLOW_CROSSOVER = True
+    USE_ADVERSARIAL_GRID = True
 
     ### --- parametri di mutation ---
     MUTATION_STRATEGY = MutationStrategy.RANDOM
@@ -53,11 +54,11 @@ class EA_Config:
     CROSSOVER_WEIGHT = 0.2
 
     ### --- parametri di selezione ---
-    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.BEST
+    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.RANDOM
 
     ### --- parametri di stopping criteria ---
     STOPPING_CRITERIA = StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT
-    MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 5
+    MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 4
     CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
     ### --- parametri di simulazione ---

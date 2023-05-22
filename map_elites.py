@@ -18,22 +18,39 @@ class MAP_Elites:
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
         # dove enviroment data è il "genotipo" (ex. 5 melee e 5 ranged)
-        # TODO: da espandere a più dimensioni (credo almeno due)
-        self.solution_space_grid = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
-        self.old_best_fitnesses = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
-
         if DEBUG:
             print("--- Initializing grid...")
-        self.init_grid()
-        self.old_best_fitnesses = self.get_best_fitness()
+        self.primary_grid = self.init_grid()
+        self.old_best_primary_fitnesses = self.get_best_fitness(self.primary_grid)
+        if EA_Config.USE_ADVERSARIAL_GRID:
+            self.adversarial_grid = self.init_grid()
+            self.old_best_adversarial_fitnesses = self.get_best_fitness(self.adversarial_grid)
 
     def init_grid(self): 
+        grid = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
         for i in range(EA_Config.CELLS_IN_GRID):
             envdata = MapElitesCell(i)
             # e passiamo questa soluzione nel giochino per vedere come performa, 
             # restituisce direttamente il total_reward, quello che dobbiamo massimizzare
             fitness = self.fitness_function(envdata)
-            self.solution_space_grid[i] = (envdata, fitness)
+            grid[i] = (envdata, fitness)
+        return grid
+    
+    def run_iteration_on_grid(self, grid):
+        cell_index = self.select_cell()
+        # Mutate the solution in the selected cell
+        mutated_solution = self.mutation_and_crossover(cell_index)
+        # Evaluate the fitness of the mutated solution
+        fitness = self.fitness_function(mutated_solution)
+        # Aggiorniamo la soluzione nella griglia 
+        # solo se la fitness è migliore
+        if fitness >= grid[cell_index][1]:
+            if DEBUG: 
+                print(f"New best fitness: {fitness} in cell {cell_index}")
+            grid[cell_index] = (mutated_solution, fitness)
+            return (mutated_solution, fitness), cell_index
+        else: 
+            return None, None
 
     def run(self): 
         if DEBUG:
@@ -42,23 +59,23 @@ class MAP_Elites:
         while True:
             if DEBUG:
                 print(f"Running epoch: {self.current_epoch}")
-            # Select a cell in the grid based on some selection criteria
-            cell_index = self.select_cell()
-            # Mutate the solution in the selected cell
-            mutated_solution = self.mutation_and_crossover(cell_index)
-            # Evaluate the fitness of the mutated solution
-            fitness = self.fitness_function(mutated_solution)
-            # Aggiorniamo la soluzione nella griglia 
-            # solo se la fitness è migliore
-            if fitness > self.solution_space_grid[cell_index][1]:
-                if DEBUG: 
-                    print(f"New best fitness: {fitness} in cell {cell_index}")
-                self.solution_space_grid[cell_index] = (mutated_solution, fitness)
 
-            self.logger.to_plot_2d(self.solution_space_grid)
+            modified_cell, index = self.run_iteration_on_grid(self.primary_grid)
+            if modified_cell is not None:
+                self.primary_grid[index] = modified_cell
+            self.logger.to_plot_2d(self.primary_grid, label="primary")
+
+            if EA_Config.USE_ADVERSARIAL_GRID:
+                modified_cell, index = self.run_iteration_on_grid(self.adversarial_grid)
+                if modified_cell is not None:
+                    self.adversarial_grid[index] = modified_cell
+                self.logger.to_plot_2d(self.adversarial_grid, label="adversarial")
+
             self.current_epoch += 1
-            # stop loop if stopping criteria met
+
             if self.stopping_criteria_met():
+                print("Best fitnesses: ")
+                print(self.get_best_fitness(self.primary_grid))
                 break
 
         self.logger.close()
@@ -78,7 +95,7 @@ class MAP_Elites:
 
         if EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM: 
             while True: # necessario per evitare che venga selezionata la stessa cella
-                random_index = random.randint(0, len(self.solution_space_grid)-1)
+                random_index = random.randint(0, len(self.primary_grid)-1)
                 if random_index != cell_index:
                     if DEBUG:
                         print(f"Selected cell: {random_index}")
@@ -88,12 +105,12 @@ class MAP_Elites:
             if cell_index is not None:
                 if cell_index == 0:
                     selected_index = cell_index + 1
-                elif cell_index == len(self.solution_space_grid)-1:
+                elif cell_index == len(self.primary_grid)-1:
                     selected_index = cell_index - 1
                 else:
                     selected_index = cell_index + random.choice([-1, 1])
             else:
-                selected_index = random.randint(0, len(self.solution_space_grid)-1)
+                selected_index = random.randint(0, len(self.primary_grid)-1)
 
             if DEBUG:
                 print(f"Selected cell: {selected_index}")
@@ -102,7 +119,7 @@ class MAP_Elites:
         elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.BEST:
             # se ho già selezionato una cella, seleziono la migliore tra le altre
             selected_index = None
-            values = [cell[1] for cell in self.solution_space_grid]
+            values = [cell[1] for cell in self.primary_grid]
             if cell_index is not None: 
                 values[cell_index] = -10000000000
 
@@ -113,7 +130,7 @@ class MAP_Elites:
             
         elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.GAUSSIAN_BEST:    
             # se ho già selezionato una cella, seleziono la migliore tra le altre
-            probs = [abs(cell[1]) for cell in self.solution_space_grid]
+            probs = [abs(cell[1]) for cell in self.primary_grid]
             if cell_index is not None: 
                 # tolgo la cella già scelta
                 probs[cell_index] = 0.0
@@ -129,17 +146,25 @@ class MAP_Elites:
             
 
     def mutation_and_crossover(self, cell_index):
-        selected_cell = self.solution_space_grid[cell_index][0]
+        selected_cell = self.primary_grid[cell_index][0]
         
         if EA_Config.ALLOW_MUTATION:
-            selected_cell = selected_cell.mutate()
+            old_cell = selected_cell
+            selected_cell.mutate()
+            if DEBUG and old_cell != selected_cell:
+                print("Mutated cell: ", selected_cell)
 
         if EA_Config.ALLOW_CROSSOVER:
             other_cell_index = self.select_cell(cell_index=cell_index)
-            other_env_data = self.solution_space_grid[other_cell_index][0]
-            selected_cell = selected_cell.crossover(other_env_data)
+            other_env_data = self.primary_grid[other_cell_index][0]
+            
+            old_cell = selected_cell
+            selected_cell.crossover(other_env_data)
+            if DEBUG and old_cell != selected_cell:
+                print("Crossover cell: ", old_cell)
 
         return selected_cell
+
 
     def stopping_criteria_met(self):
 
@@ -154,23 +179,24 @@ class MAP_Elites:
                     print("Max number of epochs reached")
                 return True
             else: # se non ci sono soluzioni migliori da almeno 10 epoche allora stoppiamo
-                current_best_fitnesses = self.get_best_fitness()
+                # TODO: gestire per adversarial grid
+                current_best_fitnesses = self.get_best_fitness(self.primary_grid)
 
-                if all([x >= y for x, y in zip(self.old_best_fitnesses, current_best_fitnesses)]):
+                if all([x >= y for x, y in zip(self.old_best_primary_fitnesses, current_best_fitnesses)]):
                     EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT += 1
                 else:
                     EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
-                self.old_best_fitnesses = current_best_fitnesses
+                self.old_best_primary_fitnesses = current_best_fitnesses
 
                 if DEBUG:
                     print(f"Epochs without improvement: {EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT}")
                 return EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT > EA_Config.MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT
     
-    def get_best_solutions(self):
-        return [cell[0] for cell in self.solution_space_grid if cell is not None]
+    def get_best_solutions(self, grid):
+        return [cell[0] for cell in grid if cell is not None]
     
-    def get_best_fitness(self):
-        return [cell[1] for cell in self.solution_space_grid if cell is not None]
+    def get_best_fitness(self, grid):
+        return [cell[1] for cell in grid if cell is not None]
     
 
