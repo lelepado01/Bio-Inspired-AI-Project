@@ -1,11 +1,10 @@
 
 from map_elites import MAP_Elites
+from evolutionary_algorithm import EA_Config
 import os
 
-NO_DISPLAY = True
-
 def main(): 
-    if NO_DISPLAY: 
+    if EA_Config.NO_DISPLAY: 
         os.environ["SDL_VIDEODRIVER"] = "dummy"
 
     algorithm = MAP_Elites()

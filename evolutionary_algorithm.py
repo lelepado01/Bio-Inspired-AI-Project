@@ -1,40 +1,64 @@
 
 class MutationStrategy:
-    # semplicemente prendo un valore random 
-    # all'interno del range della cella
-    # e lo assegno come nuovo valore
     RANDOM = 0
-    # prendo un valore random da una distribuzione gaussiana
-    # e lo aggiungo al valore corrente della cella
-    # facendo attenzione che non esca dai limiti della cella
+    """
+    Semplicemente prende un valore random 
+    all'interno del range della cella
+    e lo assegna come nuovo valore
+    """
     GAUSSIAN = 1
+    """
+    Prende un valore random da una distribuzione gaussiana
+    e lo aggiunge al valore corrente della cella
+    facendo attenzione che non esca dai limiti della cella
+    """
 
-# TODO: implementare altri tipi di crossover
 class CrossoverStrategy:
-    # prendo la media dei valori delle due celle, 
-    # dove moltiplico il valore della seconda cella per un peso (CROSSOVER_WEIGHT),
-    # in modo da non fare uscire il valore della prima cella dai limiti
     MEAN = 0
+    """
+    Prende la media dei valori delle due celle, 
+    moltiplica il valore della seconda cella per un peso (CROSSOVER_WEIGHT),
+    in modo da non fare uscire il valore della prima cella dai limiti
+    """
 
 class CrossoverSelectionStrategy:
-    # seleziono cella a random
+    
     RANDOM = 0
-    # seleziono cella adiacente
+    """
+    Seleziona cella a random
+    """
+
     ADJACENT = 1
-    # seleziono sempre cella con valore più alto
+    """
+    Seleziona cella adiacente
+    """
+
     BEST = 2
-    # seleziono cella con probabilità basata sul valore fitness
+    """
+    Seleziona sempre cella con valore più alto
+    """
+    
     GAUSSIAN_BEST = 3
+    """
+    Seleziona cella con probabilità basata sul valore fitness
+    """
 
 class StoppingCriteria:
-    # fermo l'algoritmo dopo un numero di generazioni
     GENERATIONS = 0
-    # fermo l'algoritmo dopo un numero di generazioni senza miglioramenti
-    # (o dopo un numero di generazioni arbitrario)
+    """
+    Fermo l'algoritmo dopo un numero di generazioni
+    """
+    
     GENERATIONS_WITHOUT_IMPROVEMENT = 1
+    """
+    Fermo l'algoritmo dopo un numero di generazioni senza miglioramenti
+    (o dopo un numero di generazioni arbitrario)
+    """
 
-# formazione iniziale degli agenti sulla mappa
 class FormationType:
+    """
+    Formazione iniziale degli agenti sulla mappa
+    """
     RANDOM = 0
     DEFAULT = 1
     SQUARE = 2
@@ -42,6 +66,8 @@ class FormationType:
 
 class EA_Config: 
     ### --- parametri generali ---
+    DEBUG = False
+    NO_DISPLAY = True
     ALLOW_MUTATION = True
     ALLOW_CROSSOVER = True
     USE_ADVERSARIAL_GRID = True

@@ -8,6 +8,12 @@ PLT2D = "plt2d/"
 PLT3D = "plt3d/"
 
 class Logger(): 
+    """
+    Classe ausiliaria per il logging dei dati
+    - logga su file
+    - plot 2d e 3d
+    - plot fitness
+    """
 
     def __init__(self, filename):
         self.file = open(LOG_DIRECTORY + filename, "+a")

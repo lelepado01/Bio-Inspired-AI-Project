@@ -8,8 +8,6 @@ from map_elites_cell import MapElitesCell
 from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy, StoppingCriteria
 from logger import Logger
 
-DEBUG = False
-
 class MAP_Elites: 
     def __init__(self):
         self.current_epoch = 0
@@ -18,7 +16,7 @@ class MAP_Elites:
         # partiamo con una griglia semplice con una sola dimensione 
         # la griglia contiene coppie (EnvironmentData, fitness)
         # dove enviroment data è il "genotipo" (ex. 5 melee e 5 ranged)
-        if DEBUG:
+        if EA_Config.DEBUG:
             print("--- Initializing grid...")
         self.primary_grid = self.init_grid()
         self.old_best_primary_fitnesses = self.get_best_fitness(self.primary_grid)
@@ -45,19 +43,21 @@ class MAP_Elites:
         # Aggiorniamo la soluzione nella griglia 
         # solo se la fitness è migliore
         if fitness >= grid[cell_index][1]:
-            if DEBUG: 
+            if EA_Config.DEBUG: 
                 print(f"New best fitness: {fitness} in cell {cell_index}")
             grid[cell_index] = (mutated_solution, fitness)
             return (mutated_solution, fitness), cell_index
         else: 
+            if EA_Config.DEBUG: 
+                print(f"Fitness not improved: {fitness} in cell {cell_index}")
             return None, None
 
     def run(self): 
-        if DEBUG:
+        if EA_Config.DEBUG:
             print("--- Running MAP...")
 
         while True:
-            if DEBUG:
+            if EA_Config.DEBUG:
                 print(f"Running epoch: {self.current_epoch}")
 
             modified_cell, index = self.run_iteration_on_grid(self.primary_grid)
@@ -88,7 +88,7 @@ class MAP_Elites:
         self.logger.close()
 
     def fitness_function(self, env_data):
-        if DEBUG:
+        if EA_Config.DEBUG:
             print("Evaluating enviroment...")
         # eseguiamo l'environemnt con i parametri passati, 
         # che danno informazioni riguardo a numero di agenti e tipo di agenti
@@ -105,7 +105,7 @@ class MAP_Elites:
             while True: # necessario per evitare che venga selezionata la stessa cella
                 random_index = random.randint(0, len(self.primary_grid)-1)
                 if random_index != cell_index:
-                    if DEBUG:
+                    if EA_Config.DEBUG:
                         print(f"Selected cell: {random_index}")
                     return random_index
         elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.ADJACENT:
@@ -120,7 +120,7 @@ class MAP_Elites:
             else:
                 selected_index = random.randint(0, len(self.primary_grid)-1)
 
-            if DEBUG:
+            if EA_Config.DEBUG:
                 print(f"Selected cell: {selected_index}")
             return selected_index
         
@@ -132,7 +132,7 @@ class MAP_Elites:
                 values[cell_index] = -10000000000
 
             selected_index = np.argmax(values)
-            if DEBUG:
+            if EA_Config.DEBUG:
                 print(f"Selected cell: {selected_index}")
             return selected_index
             
@@ -145,7 +145,7 @@ class MAP_Elites:
             probs /= np.sum(probs)
 
             selected_index = np.random.choice(len(probs), p=probs)
-            if DEBUG:
+            if EA_Config.DEBUG:
                 print(f"Selected cell: {selected_index}")
             return selected_index
             
@@ -159,7 +159,7 @@ class MAP_Elites:
         if EA_Config.ALLOW_MUTATION:
             old_cell = selected_cell
             selected_cell.mutate()
-            if DEBUG and old_cell != selected_cell:
+            if EA_Config.DEBUG and old_cell != selected_cell:
                 print("Mutated cell: ", selected_cell)
 
         if EA_Config.ALLOW_CROSSOVER:
@@ -168,7 +168,7 @@ class MAP_Elites:
 
             old_cell = selected_cell
             selected_cell.crossover(other_env_data)
-            if DEBUG and old_cell != selected_cell:
+            if EA_Config.DEBUG and old_cell != selected_cell:
                 print("Crossover cell: ", old_cell)
 
         return selected_cell
@@ -177,13 +177,13 @@ class MAP_Elites:
     def stopping_criteria_met(self):
 
         if EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS:
-            if DEBUG:
+            if EA_Config.DEBUG:
                 print("Max number of epochs reached")
             return self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS
         
         elif EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT: 
             if self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS: # se abbiamo superato il numero massimo di epoche allora stoppiamo
-                if DEBUG:
+                if EA_Config.DEBUG:
                     print("Max number of epochs reached")
                 return True
             else: # se non ci sono soluzioni migliori da almeno 10 epoche allora stoppiamo
@@ -197,7 +197,7 @@ class MAP_Elites:
 
                 self.old_best_primary_fitnesses = current_best_fitnesses
 
-                if DEBUG:
+                if EA_Config.DEBUG:
                     print(f"Epochs without improvement: {EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT}")
                 return EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT > EA_Config.MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT
     
