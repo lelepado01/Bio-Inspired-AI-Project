@@ -1,6 +1,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 LOG_DIRECTORY = "logs/"
 PLT2D = "plt2d/"
@@ -64,18 +65,22 @@ class Logger():
             print(f"|{round(i[1], 2)}|", end=" ")
         print("]")
 
-    def add_primary_fitness(self, fitness):
+    def add_primary_fitness(self, fitnesses):
+        fitness = sum(fitnesses) / len(fitnesses)
         self.primary_fitnesses.append(fitness)
 
-    def add_adversarial_fitness(self, fitness):
+    def add_adversarial_fitness(self, fitnesses):
+        fitness = sum(fitnesses) / len(fitnesses)
         self.adversarial_fitnesses.append(fitness)
 
     def plot_fitness(self, label=""):
         plt.clf()
-        plt.plot(self.primary_fitnesses, label="Primary Fitness")
-        if len(self.adversarial_fitnesses) > 0:
-            plt.plot(self.adversarial_fitnesses, label="Adversarial Fitness")
+        if len(self.adversarial_fitnesses) == 0:
+            plt.plot(self.primary_fitnesses, label="Fitness")
+        else:
+            df = pd.DataFrame({"Primary Fitness": self.primary_fitnesses, "Adversarial Fitness": self.adversarial_fitnesses})
+            df.plot()
         plt.xlabel("Epoch")
         plt.ylabel("Fitness")
         plt.legend()
-        plt.savefig(LOG_DIRECTORY + label + "_fitness.png")
+        plt.savefig(LOG_DIRECTORY + label + ".png")

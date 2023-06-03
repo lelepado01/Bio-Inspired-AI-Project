@@ -44,7 +44,7 @@ class EA_Config:
     ### --- parametri generali ---
     ALLOW_MUTATION = True
     ALLOW_CROSSOVER = True
-    USE_ADVERSARIAL_GRID = False
+    USE_ADVERSARIAL_GRID = True
 
     ### --- parametri di mutation ---
     MUTATION_STRATEGY = MutationStrategy.RANDOM
@@ -66,7 +66,7 @@ class EA_Config:
 
     ### --- parametri di simulazione ---
     MAX_NUMBER_OF_EPISODES = 1
-    MAX_NUMBER_OF_EPOCHS = 20
+    MAX_NUMBER_OF_EPOCHS = 10
     
     TOTAL_NUMBER_OF_AGENTS = 100
     AGENT_CLASSES = 2

@@ -8,7 +8,7 @@ from map_elites_cell import MapElitesCell
 from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy, StoppingCriteria
 from logger import Logger
 
-DEBUG = True
+DEBUG = False
 
 class MAP_Elites: 
     def __init__(self):
@@ -64,14 +64,14 @@ class MAP_Elites:
             if modified_cell is not None:
                 self.primary_grid[index] = modified_cell
             self.logger.to_plot_2d(self.primary_grid, label="primary")
-            self.logger.add_primary_fitness(max(self.get_best_fitness(self.primary_grid)))
+            self.logger.add_primary_fitness(self.get_best_fitness(self.primary_grid))
 
             if EA_Config.USE_ADVERSARIAL_GRID:
                 modified_cell, index = self.run_iteration_on_grid(self.adversarial_grid)
                 if modified_cell is not None:
                     self.adversarial_grid[index] = modified_cell
                 self.logger.to_plot_2d(self.adversarial_grid, label="adversarial")
-                self.logger.add_adversarial_fitness(max(self.get_best_fitness(self.primary_grid)))
+                self.logger.add_adversarial_fitness(self.get_best_fitness(self.adversarial_grid))
 
 
             self.current_epoch += 1
@@ -84,7 +84,7 @@ class MAP_Elites:
                     print(self.get_best_fitness(self.adversarial_grid))
                 break
         
-        self.logger.plot_fitness()
+        self.logger.plot_fitness("fitness")
         self.logger.close()
 
     def fitness_function(self, env_data):
@@ -97,8 +97,9 @@ class MAP_Elites:
         return fitness_score
 
     def select_cell(self, cell_index=None):
-        if DEBUG:
-            print(f"Selecting cell with selection strategy: {EA_Config.CROSSOVER_SELECTION_STRATEGY}")
+        """
+        Seleziona una cella della griglia in base alla strategia di selezione 
+        """
 
         if EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM: 
             while True: # necessario per evitare che venga selezionata la stessa cella

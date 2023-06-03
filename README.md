@@ -52,14 +52,16 @@ random_demo(env, render=True, episodes=1)
 - [x] funzioni di mutation e crossover in environment_data.py
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
 - [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
+
+- [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
 - [ ] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
 - [ ] testa che il salvataggio delle immagini e a file di testo funzioni (soprattutto la seconda, non l'ho testato)
 - [ ] Implementare altri tipi di crossover
 - [ ] Provare a parallelizzare l'algoritmo usando il CLUSTER Siiiiiii
 - [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
-- [ ] magari si può fare più di un algoritmo... non sembra così tanto lavoro (ANCHE NO)
 - [ ] espandere a più dimensioni (credo almeno due)
+
 - [ ] iniziare a fare qualche test 
     - [ ] decidere quante epoche, quanti agenti, i parametri...
     - [ ] magari facciamo un'altra sezione nel readme in cui metta i risultati dei test
