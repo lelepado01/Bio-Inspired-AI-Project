@@ -208,6 +208,11 @@ def get_config(
     return cfg
 
 
+def sanity_check(melee_pos, ranged_pos, width, height):
+    for x, y in melee_pos + ranged_pos:
+        if not (0 < x < width - 1 and 0 < y < height - 1):
+            assert False
+
 def generate_map(env, map_size, handles, env_data):
     width = map_size
     height = map_size
@@ -222,50 +227,93 @@ def generate_map(env, map_size, handles, env_data):
     elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.DEFAULT:
         # TODO: cambiare init_num con numero di melee e ranged
         # però boh dobbiamo guardarlo meglio
-        gap = 3
+        gap = 1
         # left
         n = init_num
         side = int(math.sqrt(n)) * 2
-        pos = [[], []]
-        ct = 0
-        for x in range(max(width // 2 - gap - side, 1), width // 2 - gap - side + side, 2):
+        melee_pos = []
+        ranged_pos = []
+        agent_index = 0
+        for x in range(max(width // 2 - gap - side, 1), width // 2 - gap, 2):
             for y in range((height - side) // 2, (height - side) // 2 + side, 2):
-                pos[ct % 2].append([x, y])
-            ct += 1
+                if agent_index % 2 == 0:
+                    melee_pos.append([x, y])
+                else:
+                    ranged_pos.append([x, y])
+            agent_index += 1
 
-        xct1 = ct
-        for x, y in pos[0] + pos[1]:
-            if not (0 < x < width - 1 and 0 < y < height - 1):
-                assert False
-
-        env.add_agents(handles[0], method="custom", pos=pos[0])
-        env.add_agents(handles[1], method="custom", pos=pos[1])
+        max_index = agent_index
+        sanity_check(melee_pos, ranged_pos, width, height)
+        env.add_agents(handles[0], method="custom", pos=melee_pos)
+        env.add_agents(handles[1], method="custom", pos=ranged_pos)
 
         # right
         n = init_num
         side = int(math.sqrt(n)) * 2
-        pos = [[], []]
-        ct = 0
+        melee_pos = []
+        ranged_pos = []
+        agent_index = 0
         for x in range(width // 2 + gap, min(width // 2 + gap + side, height - 1), 2):
             for y in range(
                 (height - side) // 2, min((height - side) // 2 + side, height - 1), 2
             ):
-                pos[ct % 2].append([x, y])
-            ct += 1
-            if xct1 <= ct:
+                if agent_index % 2 == 0:
+                    melee_pos.append([x, y])
+                else:
+                    ranged_pos.append([x, y])
+            agent_index += 1
+            if max_index <= agent_index:
                 break
 
-        for x, y in pos[0] + pos[1]:
-            if not (0 < x < width - 1 and 0 < y < height - 1):
-                assert False
+        sanity_check(melee_pos, ranged_pos, width, height)
+        env.add_agents(handles[2], method="custom", pos=melee_pos)
+        env.add_agents(handles[3], method="custom", pos=ranged_pos)
 
-        env.add_agents(handles[2], method="custom", pos=pos[0])
-        env.add_agents(handles[3], method="custom", pos=pos[1])
+    elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.SQUARE:
+        gap = 1
+        # left
+        side = width // 2
+        melee_pos = []
+        ranged_pos = []
+        agent_index = 0
+        current_pos_x = gap
+        current_pos_y = gap
+        while agent_index < env_data.number_of_melee + env_data.number_of_ranged: 
+            if agent_index < env_data.number_of_melee:
+                melee_pos.append([current_pos_x, current_pos_y])
+            else:
+                ranged_pos.append([current_pos_x, current_pos_y])
+            agent_index += 1
+            current_pos_y += 2
+            if current_pos_y >= side:
+                current_pos_y = gap
+                current_pos_x += 2
 
-    # TODO: aggiungere altre formazioni, tipo quadrato o tutti melee davanti e archers dietro 
-    # per aggiungerle fai così:
-    # elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.SQUARE:
-    # (...)
+        sanity_check(melee_pos, ranged_pos, width, height)
+        env.add_agents(handles[0], method="custom", pos=melee_pos)
+        env.add_agents(handles[1], method="custom", pos=ranged_pos)
+
+        # right
+        side = width
+        melee_pos = []
+        ranged_pos = []
+        agent_index = 0
+        current_pos_x = gap + width // 2
+        current_pos_y = gap
+        while agent_index < env_data.number_of_melee + env_data.number_of_ranged: 
+            if agent_index < env_data.number_of_melee:
+                melee_pos.append([current_pos_x, current_pos_y])
+            else:
+                ranged_pos.append([current_pos_x, current_pos_y])
+            agent_index += 1
+            current_pos_y += 2
+            if current_pos_y >= side:
+                current_pos_y = gap + width // 2
+                current_pos_x += 2
+
+        sanity_check(melee_pos, ranged_pos, width, height)
+        env.add_agents(handles[2], method="custom", pos=melee_pos)
+        env.add_agents(handles[3], method="custom", pos=ranged_pos)
 
 class _parallel_env(magent_parallel_env, EzPickle):
     metadata = {
