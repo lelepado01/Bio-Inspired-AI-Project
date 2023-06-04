@@ -53,6 +53,7 @@ random_demo(env, render=True, episodes=1)
 - [x] inizializzazione di EnvironmentData in base ai parametri passati
 - [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
 
+- [ ] aggiustare la posizione iniziale degli agenti sinistri (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
 - [ ] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
