@@ -70,7 +70,7 @@ random_demo(env, render=True, episodes=1)
 - [ ] fare un po' di grafici
 - [ ] provare a fare un sistema che salvi il video della battaglia finale
 
-## Useful links
+## Useful links 🔗
 
 Paper del prof: 
 https://arxiv.org/abs/2208.12758
