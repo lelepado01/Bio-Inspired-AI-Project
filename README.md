@@ -17,11 +17,11 @@ The library MAgent2 can supposedly be installed with pip, but in our case we enc
 
 ```git clone https://github.com/lelepado01/Bio-Inspired-AI-Project.git```
 
-#### 1. Install MAgent2 and Requirements💿
+#### 2. Install MAgent2 and Requirements💿
 
 ```pip install -r requirements.txt```
 
-#### 2. Complete the library with the missing files 🛠️
+#### 3. Complete the library with the missing files 🛠️
 
 Download the library from the github repository:
 
@@ -29,11 +29,11 @@ https://github.com/Farama-Foundation/MAgent2
 
 Only the *magent2* folder is necessary
 
-#### 3. Copy the missing files 📁
+#### 4. Copy the missing files 📁
 
 Go to the source folder of the library and copy the files into the magent2 folder of the library installed with pip (this path can be found with the command ```pip show magent2```)
 
-#### 4. Correct Runtime Error in MAgent2 🪚
+#### 5. Correct Runtime Error in MAgent2 🪚
 
 In the same directory, open the file *gridworld.py* and remove: 
 
@@ -55,7 +55,7 @@ In the file *render.py* remove:
 
 This should fix a bug we encountered when running the environment several times, the window would get smaller and smaller, until the program crashed.
 
-#### 5. Test the library
+#### 6. Test the library
 
 Run the following code to test the library:
 
