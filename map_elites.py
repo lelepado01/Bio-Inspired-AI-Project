@@ -8,6 +8,8 @@ from map_elites_cell import MapElitesCell
 from evolutionary_algorithm import EA_Config, CrossoverSelectionStrategy, StoppingCriteria
 from logger import Logger
 
+FITNESS_LABEL = "fitness"
+
 class MAP_Elites: 
     def __init__(self):
         self.current_epoch = 0
@@ -57,7 +59,7 @@ class MAP_Elites:
             print("--- Running MAP...")
 
         while True:
-            print(f"Running epoch: {self.current_epoch}")
+            print(f" --- Running epoch: {self.current_epoch} --- ")
 
             modified_cell, index = self.run_iteration_on_grid(self.primary_grid)
             if modified_cell is not None:
@@ -83,7 +85,7 @@ class MAP_Elites:
                     print(self.get_best_fitness(self.adversarial_grid))
                 break
         
-        self.logger.plot_fitness("fitness")
+        self.logger.plot_fitness(FITNESS_LABEL)
         self.logger.close()
 
     def fitness_function(self, env_data):
