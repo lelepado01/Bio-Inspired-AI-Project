@@ -3,3 +3,4 @@ pandas
 matplotlib
 pettingzoo==1.22.3
 magent2
+argparse
