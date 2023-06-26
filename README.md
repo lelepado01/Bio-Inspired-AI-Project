@@ -1,23 +1,23 @@
-# Bio-Inspired-AI-Project
+# 🐜 Bio-Inspired-AI-Project 🦖
 
-## Authors
+## Authors 🦄
 
 Gabriele Padovani ```229207```
 
 Nadia Benini ```??????```
 
-## Description
+## Description 🐘
 Boh
 
-## Installation
+## Installation 🚀🐥
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
-#### 1. Install MAgent2
+#### 1. Install MAgent2 💿
 
 ```pip install magent2```
 
-#### 2. Complete the library with the missing files
+#### 2. Complete the library with the missing files 🛠️
 
 Download the library from the github repository:
 
@@ -25,11 +25,11 @@ https://github.com/Farama-Foundation/MAgent2
 
 Only the *magent2* folder is necessary
 
-#### 3. Copy the missing files
+#### 3. Copy the missing files 📁
 
 Go to the source folder of the library and copy the files into the magent2 folder of the library installed with pip (this path can be found with the command ```pip show magent2```)
 
-#### 4. Correct Runtime Error in MAgent2 
+#### 4. Correct Runtime Error in MAgent2 🪚
 
 In the same directory, open the file *gridworld.py* and remove: 
 
@@ -83,7 +83,7 @@ To run the project, execute the file *main.py*:
 - [ ] fare un po' di grafici
 - [ ] provare a fare un sistema che salvi il video della battaglia finale
 
-## Useful links
+## Useful links 🔗
 
 Paper del prof: 
 https://arxiv.org/abs/2208.12758
