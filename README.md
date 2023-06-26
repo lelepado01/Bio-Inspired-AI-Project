@@ -13,6 +13,10 @@ Boh
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
+#### 1. Clone Repository 🧬
+
+```git clone https://github.com/lelepado01/Bio-Inspired-AI-Project.git```
+
 #### 1. Install MAgent2 and Requirements💿
 
 ```pip install -r requirements.txt```
