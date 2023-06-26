@@ -42,8 +42,11 @@ This should solve all the runtime errors which appeared when testing the library
 In the file *render.py* remove:
 
  - At line 99: substitute 
+
     ```screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)```
+    
     With
+    
     ```screen_size = (infoObject.current_w, infoObject.current_h)```
 
 This should fix a bug we encountered when running the environment several times, the window would get smaller and smaller, until the program crashed.
@@ -62,7 +65,7 @@ random_demo(env, render=True, episodes=1)
 
 To run the project, execute the file *main.py*: 
     
-     ```python main.py```
+```python main.py```
 
 ## TODOs
 
