@@ -91,8 +91,8 @@ class EA_Config:
     INITIAL_FORMATION_TYPE = FormationType.DEFAULT
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 1
-    MAX_NUMBER_OF_EPOCHS = 10
+    MAX_NUMBER_OF_EPISODES = 10
+    MAX_NUMBER_OF_EPOCHS = 20
     
     TOTAL_NUMBER_OF_AGENTS = 100
     AGENT_CLASSES = 2

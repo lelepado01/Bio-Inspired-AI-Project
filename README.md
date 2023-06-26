@@ -13,9 +13,9 @@ Boh
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
-#### 1. Install MAgent2 💿
+#### 1. Install MAgent2 and Requirements💿
 
-```pip install magent2```
+```pip install -r requirements.txt```
 
 #### 2. Complete the library with the missing files 🛠️
 
@@ -73,7 +73,6 @@ To run the project, execute the file *main.py*:
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
 - [x] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
-- [ ] testa che il salvataggio delle immagini e a file di testo funzioni (soprattutto la seconda, non l'ho testato)
 - [ ] Implementare altri tipi di crossover
 - [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
 

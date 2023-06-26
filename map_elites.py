@@ -1,6 +1,5 @@
 import numpy as np
 import random
-
 from pettingzoo.utils import random_demo
 
 import custom_combined_arms
