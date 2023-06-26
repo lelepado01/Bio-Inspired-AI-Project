@@ -31,6 +31,23 @@ Go to the source folder of the library and copy the files into the magent2 folde
 
 #### 4. Correct Runtime Error in MAgent2 
 
+In the same directory, open the file *gridworld.py* and remove: 
+
+ - At line 191: the type annotation ```: list[AgentSymbol]```
+ - At line 192: the type annotation ```: list[float]```
+ - At line 562: the type annotation ```-> list[ctypes.c_int32]```
+
+This should solve all the runtime errors which appeared when testing the library.
+
+In the file *render.py* remove:
+
+ - At line 99: substitute 
+    ```screen_size = (infoObject.current_w - 50, infoObject.current_h - 50)```
+    With
+    ```screen_size = (infoObject.current_w, infoObject.current_h)```
+
+This should fix a bug we encountered when running the environment several times, the window would get smaller and smaller, until the program crashed.
+
 #### 5. Test the library
 
 Run the following code to test the library:
@@ -43,15 +60,11 @@ env = battle_v4.env(render_mode='human')
 random_demo(env, render=True, episodes=1)
 ```
 
-## TODOs
+To run the project, execute the file *main.py*: 
+    
+     ```python main.py```
 
-- [x] visualizzazione della griglia del fitness (magari anche over time)
-- [x] capire se si possono passare tutti i parametri alla funzione env
-- [x] passare parametri della simulazione in una sola classe
-- [x] spostare consts e metterle come parametri dell'algoritmo, vanno spostati nella classe e decisi nel main
-- [x] funzioni di mutation e crossover in environment_data.py
-- [x] inizializzazione di EnvironmentData in base ai parametri passati
-- [x] fare in modo che MAP_Elites non stampi sempre tutto tutto
+## TODOs
 
 - [ ] aggiustare la posizione iniziale degli agenti sinistri (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
