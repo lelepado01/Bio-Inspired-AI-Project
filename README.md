@@ -71,13 +71,11 @@ To run the project, execute the file *main.py*:
 
 - [ ] aggiustare la posizione iniziale degli agenti sinistri (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
-- [ ] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
+- [x] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
 - [ ] testa che il salvataggio delle immagini e a file di testo funzioni (soprattutto la seconda, non l'ho testato)
 - [ ] Implementare altri tipi di crossover
-- [ ] Provare a parallelizzare l'algoritmo usando il CLUSTER Siiiiiii
 - [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
-- [ ] espandere a più dimensioni (credo almeno due)
 
 - [ ] iniziare a fare qualche test 
     - [ ] decidere quante epoche, quanti agenti, i parametri...

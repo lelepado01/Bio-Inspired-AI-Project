@@ -88,7 +88,7 @@ class EA_Config:
     CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
     ### --- parametri di simulazione ---
-    INITIAL_FORMATION_TYPE = FormationType.SQUARE
+    INITIAL_FORMATION_TYPE = FormationType.DEFAULT
 
     ### --- parametri di simulazione ---
     MAX_NUMBER_OF_EPISODES = 1

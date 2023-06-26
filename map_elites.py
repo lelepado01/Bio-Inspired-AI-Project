@@ -57,8 +57,7 @@ class MAP_Elites:
             print("--- Running MAP...")
 
         while True:
-            if EA_Config.DEBUG:
-                print(f"Running epoch: {self.current_epoch}")
+            print(f"Running epoch: {self.current_epoch}")
 
             modified_cell, index = self.run_iteration_on_grid(self.primary_grid)
             if modified_cell is not None:

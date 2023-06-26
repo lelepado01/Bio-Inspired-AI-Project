@@ -31,7 +31,6 @@ class MapElitesCell:
     def mutate(self): 
         if EA_Config.MUTATION_STRATEGY == MutationStrategy.RANDOM:
             val = random.randint(self.cell_boundary_low, self.cell_boundary_high)
-            print("Mutated cell: ", val, " from ", self.current_value)
             self.current_value = val
         elif EA_Config.MUTATION_STRATEGY == MutationStrategy.GAUSSIAN:
             gauss_val = random.gauss(0, 1) * (self.cell_boundary_high - self.cell_boundary_low)
