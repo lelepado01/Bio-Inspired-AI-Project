@@ -1,5 +1,5 @@
 numpy
 pandas
 matplotlib
-pettingzoo
+pettingzoo==1.22.3
 magent2
