@@ -7,16 +7,12 @@ import os
 def main(): 
     
     parser = ArgumentParser()
-    parser.add_argument("-d", "--debug", action="store_true", help="Enable debug mode")
-    parser.add_argument("-nd", "--no-display", action="store_true", help="Disable pygame display")
-
+    parser.add_argument("-d", "--debug", action="store_true", default=False, help="Enable debug mode")
+    parser.add_argument("-nd", "--no-display", action="store_true", default=True, help="Disable pygame display")
     args = parser.parse_args()
-    if args.debug:
-        EA_Config.DEBUG = True
-    if not args.no_display:
-        EA_Config.NO_DISPLAY = True
 
-    if EA_Config.NO_DISPLAY: 
+    EA_Config.DEBUG = args.debug
+    if args.no_display: 
         os.environ["SDL_VIDEODRIVER"] = "dummy"
 
     algorithm = MAP_Elites()

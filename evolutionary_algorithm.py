@@ -67,20 +67,20 @@ class FormationType:
 class EA_Config: 
     ### --- parametri generali ---
     DEBUG = False
-    NO_DISPLAY = True
     ALLOW_MUTATION = True
     ALLOW_CROSSOVER = True
     USE_ADVERSARIAL_GRID = True
 
     ### --- parametri di mutation ---
-    MUTATION_STRATEGY = MutationStrategy.RANDOM
+    MUTATION_STRATEGY = MutationStrategy.GAUSSIAN
+    MUTATION_INCENTIVE = 1 # allarga il range di mutazione, per renderla più probabile, visto quanto è lento il training
 
     ### ---- parametri di crossover ---
     CROSSOVER_STRATEGY = CrossoverStrategy.MEAN
     CROSSOVER_WEIGHT = 0.2
 
     ### --- parametri di selezione ---
-    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.RANDOM
+    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.GAUSSIAN_BEST
 
     ### --- parametri di stopping criteria ---
     STOPPING_CRITERIA = StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT
@@ -88,12 +88,12 @@ class EA_Config:
     CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
     ### --- parametri di simulazione ---
-    INITIAL_FORMATION_TYPE = FormationType.DEFAULT
+    INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 10
-    MAX_NUMBER_OF_EPOCHS = 20
+    MAX_NUMBER_OF_EPISODES = 100
+    MAX_NUMBER_OF_EPOCHS = 10
     
-    TOTAL_NUMBER_OF_AGENTS = 100
+    TOTAL_NUMBER_OF_AGENTS = 20
     AGENT_CLASSES = 2
-    CELLS_IN_GRID = 5
+    CELLS_IN_GRID = 2

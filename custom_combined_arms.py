@@ -225,8 +225,6 @@ def generate_map(env, map_size, handles, env_data):
         env.add_agents(handles[2], method="random", n=env_data.number_of_melee)
         env.add_agents(handles[3], method="random", n=env_data.number_of_ranged)
     elif EA_Config.INITIAL_FORMATION_TYPE == FormationType.DEFAULT:
-        # TODO: cambiare init_num con numero di melee e ranged
-        # però boh dobbiamo guardarlo meglio
         gap = 1
         # left
         n = init_num

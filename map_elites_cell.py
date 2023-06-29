@@ -33,7 +33,8 @@ class MapElitesCell:
             val = random.randint(self.cell_boundary_low, self.cell_boundary_high)
             self.current_value = val
         elif EA_Config.MUTATION_STRATEGY == MutationStrategy.GAUSSIAN:
-            gauss_val = random.gauss(0, 1) * (self.cell_boundary_high - self.cell_boundary_low)
+            rand_val = random.gauss(0, 1) * (2 + EA_Config.MUTATION_INCENTIVE) - 1 # random value between -1 and 1
+            gauss_val = rand_val * (self.cell_boundary_high - self.cell_boundary_low)
             self.current_value = int(self.current_value + gauss_val)
             self.constrain_cell_value()
         else:

@@ -4,7 +4,7 @@
 
 Gabriele Padovani ```229207```
 
-Nadia Benini ```??????```
+Nadia Benini ```241520```
 
 ## Description 🐘
 Boh
@@ -69,12 +69,10 @@ To run the project, execute the file *main.py*:
 
 ## TODOs
 
-- [ ] aggiustare la posizione iniziale degli agenti sinistri (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
+- [ ] aggiustare la default position degli agenti (non divide tra archer e ranged)
+- [ ] aggiustare la posizione iniziale degli agenti sinistri (in square) (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
-- [x] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
-- [ ] Implementare altri tipi di crossover
-- [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
 
 - [ ] iniziare a fare qualche test 
     - [ ] decidere quante epoche, quanti agenti, i parametri...
