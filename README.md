@@ -4,7 +4,7 @@
 
 Gabriele Padovani ```229207```
 
-Nadia Benini ```??????```
+Nadia Benini ```241520```
 
 ## Description 🐘
 Boh
@@ -13,11 +13,15 @@ Boh
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
-#### 1. Install MAgent2 and Requirements💿
+#### 1. Clone Repository 🧬
+
+```git clone https://github.com/lelepado01/Bio-Inspired-AI-Project.git```
+
+#### 2. Install MAgent2 and Requirements💿
 
 ```pip install -r requirements.txt```
 
-#### 2. Complete the library with the missing files 🛠️
+#### 3. Complete the library with the missing files 🛠️
 
 Download the library from the github repository:
 
@@ -25,11 +29,11 @@ https://github.com/Farama-Foundation/MAgent2
 
 Only the *magent2* folder is necessary
 
-#### 3. Copy the missing files 📁
+#### 4. Copy the missing files 📁
 
 Go to the source folder of the library and copy the files into the magent2 folder of the library installed with pip (this path can be found with the command ```pip show magent2```)
 
-#### 4. Correct Runtime Error in MAgent2 🪚
+#### 5. Correct Runtime Error in MAgent2 🪚
 
 In the same directory, open the file *gridworld.py* and remove: 
 
@@ -51,7 +55,7 @@ In the file *render.py* remove:
 
 This should fix a bug we encountered when running the environment several times, the window would get smaller and smaller, until the program crashed.
 
-#### 5. Test the library
+#### 6. Test the library
 
 Run the following code to test the library:
 
@@ -69,12 +73,10 @@ To run the project, execute the file *main.py*:
 
 ## TODOs
 
-- [ ] aggiustare la posizione iniziale degli agenti sinistri (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
+- [ ] aggiustare la default position degli agenti (non divide tra archer e ranged)
+- [ ] aggiustare la posizione iniziale degli agenti sinistri (in square) (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
-- [x] correggere metodo di installazione, ci sono altri step (ex. correggere errore nel file della libreria)
 - [ ] Fare descrizione del progetto su README.md
-- [ ] Implementare altri tipi di crossover
-- [ ] implementare tutte le formazioni iniziali (ex. square, triangolo, ecc.)
 
 - [ ] iniziare a fare qualche test 
     - [ ] decidere quante epoche, quanti agenti, i parametri...

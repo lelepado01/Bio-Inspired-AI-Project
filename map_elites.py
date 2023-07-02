@@ -79,9 +79,17 @@ class MAP_Elites:
             if self.stopping_criteria_met():
                 print("Best primary fitnesses: ")
                 print(self.get_best_fitness(self.primary_grid))
+                print("Best primary cell: ")
+                melee = self.get_best_solutions(self.primary_grid)[np.argmax(self.get_best_fitness(self.primary_grid))].current_value
+                archers = EA_Config.TOTAL_NUMBER_OF_AGENTS - melee
+                print(f"Melee: {melee}, Archers: {archers}")
                 if EA_Config.USE_ADVERSARIAL_GRID:
                     print("Best adversarial fitnesses: ")
                     print(self.get_best_fitness(self.adversarial_grid))
+                    print("Best adversarial cell: ")
+                    archers = self.get_best_solutions(self.adversarial_grid)[np.argmax(self.get_best_fitness(self.adversarial_grid))].current_value
+                    melee = EA_Config.TOTAL_NUMBER_OF_AGENTS - archers
+                    print(f"Melee: {melee}, Archers: {archers}")
                 break
         
         self.logger.plot_fitness(FITNESS_LABEL)
@@ -179,10 +187,10 @@ class MAP_Elites:
         if EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS:
             if EA_Config.DEBUG:
                 print("Max number of epochs reached")
-            return self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS
+            return self.current_epoch >= EA_Config.MAX_NUMBER_OF_EPOCHS
         
         elif EA_Config.STOPPING_CRITERIA == StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT: 
-            if self.current_epoch > EA_Config.MAX_NUMBER_OF_EPOCHS: # se abbiamo superato il numero massimo di epoche allora stoppiamo
+            if self.current_epoch >= EA_Config.MAX_NUMBER_OF_EPOCHS: # se abbiamo superato il numero massimo di epoche allora stoppiamo
                 if EA_Config.DEBUG:
                     print("Max number of epochs reached")
                 return True
@@ -199,6 +207,9 @@ class MAP_Elites:
 
                 if EA_Config.DEBUG:
                     print(f"Epochs without improvement: {EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT}")
+
+                if EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT > EA_Config.MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT: 
+                    print("Max number of epochs without improvement reached")
                 return EA_Config.CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT > EA_Config.MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT
     
     def get_best_solutions(self, grid):
