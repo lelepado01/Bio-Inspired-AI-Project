@@ -89,4 +89,5 @@ class Logger():
         plt.xlabel("Epoch")
         plt.ylabel("Fitness")
         plt.legend()
+        plt.tight_layout()
         plt.savefig(LOG_DIRECTORY + label + ".png")
