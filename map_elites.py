@@ -21,9 +21,11 @@ class MAP_Elites:
             print("--- Initializing grid...")
         self.primary_grid = self.init_grid()
         self.old_best_primary_fitnesses = self.get_best_fitness(self.primary_grid)
+        self.primary_activity_grid = np.zeros_like(self.primary_grid)
         if EA_Config.USE_ADVERSARIAL_GRID:
             self.adversarial_grid = self.init_grid()
             self.old_best_adversarial_fitnesses = self.get_best_fitness(self.adversarial_grid)
+            self.adversarial_activity_grid = np.zeros_like(self.adversarial_grid)
 
     def init_grid(self): 
         grid = np.empty(EA_Config.CELLS_IN_GRID, dtype=object)
@@ -35,8 +37,9 @@ class MAP_Elites:
             grid[i] = (envdata, fitness)
         return grid
     
-    def run_iteration_on_grid(self, grid):
+    def run_iteration_on_grid(self, grid, activity):
         cell_index = self.select_cell()
+        activity[cell_index] += 1
         # Mutate the solution in the selected cell
         mutated_solution = self.mutation_and_crossover(cell_index)
         # Evaluate the fitness of the mutated solution
@@ -60,14 +63,14 @@ class MAP_Elites:
         while True:
             print(f" --- Running epoch: {self.current_epoch} --- ")
 
-            modified_cell, index = self.run_iteration_on_grid(self.primary_grid)
+            modified_cell, index = self.run_iteration_on_grid(self.primary_grid, self.primary_activity_grid)
             if modified_cell is not None:
                 self.primary_grid[index] = modified_cell
             self.logger.to_plot_2d(self.primary_grid, label="primary")
             self.logger.add_primary_fitness(self.get_best_fitness(self.primary_grid))
 
             if EA_Config.USE_ADVERSARIAL_GRID:
-                modified_cell, index = self.run_iteration_on_grid(self.adversarial_grid)
+                modified_cell, index = self.run_iteration_on_grid(self.adversarial_grid, self.adversarial_activity_grid)
                 if modified_cell is not None:
                     self.adversarial_grid[index] = modified_cell
                 self.logger.to_plot_2d(self.adversarial_grid, label="adversarial")
@@ -79,19 +82,27 @@ class MAP_Elites:
             if self.stopping_criteria_met():
                 print("Best primary fitnesses: ")
                 print(self.get_best_fitness(self.primary_grid))
+                print("Primary Activity: ")
+                print(self.primary_activity_grid)
                 print("Best primary cell: ")
                 melee = self.get_best_solutions(self.primary_grid)[np.argmax(self.get_best_fitness(self.primary_grid))].current_value
                 archers = EA_Config.TOTAL_NUMBER_OF_AGENTS - melee
                 print(f"Melee: {melee}, Archers: {archers}")
+
                 if EA_Config.USE_ADVERSARIAL_GRID:
                     print("Best adversarial fitnesses: ")
                     print(self.get_best_fitness(self.adversarial_grid))
+                    print("Adversarial Activity: ")
+                    print(self.adversarial_activity_grid)
                     print("Best adversarial cell: ")
                     archers = self.get_best_solutions(self.adversarial_grid)[np.argmax(self.get_best_fitness(self.adversarial_grid))].current_value
                     melee = EA_Config.TOTAL_NUMBER_OF_AGENTS - archers
                     print(f"Melee: {melee}, Archers: {archers}")
+
                 break
         
+        self.logger.log_activity_grid(self.primary_activity_grid, label="primary_activity_grid")
+        self.logger.log_activity_grid(self.adversarial_activity_grid, label="adversarial_activity_grid")
         self.logger.plot_fitness(FITNESS_LABEL)
         self.logger.close()
 
@@ -100,9 +111,9 @@ class MAP_Elites:
             print("Evaluating enviroment...")
         # eseguiamo l'environemnt con i parametri passati, 
         # che danno informazioni riguardo a numero di agenti e tipo di agenti
-        env = custom_combined_arms.env(env_data=env_data, render_mode='human')
+        env = custom_combined_arms.env(env_data=env_data, render_mode=None)
         fitness_score = random_demo(env, render=False, episodes=EA_Config.MAX_NUMBER_OF_EPISODES)
-        return fitness_score
+        return fitness_score / EA_Config.MAX_NUMBER_OF_EPISODES
 
     def select_cell(self, cell_index=None):
         """

@@ -73,15 +73,10 @@ To run the project, execute the file *main.py*:
 
 ## TODOs
 
-- [ ] aggiustare la default position degli agenti (non divide tra archer e ranged)
-- [ ] aggiustare la posizione iniziale degli agenti sinistri (in square) (hanno ranged davanti e sono sempre in svantaggio rispetto agli agenti destri (che hanno melee davanti))
+- [ ] testare la default position degli agenti 
 - [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
 - [ ] Fare descrizione del progetto su README.md
 
-- [ ] iniziare a fare qualche test 
-    - [ ] decidere quante epoche, quanti agenti, i parametri...
-    - [ ] magari facciamo un'altra sezione nel readme in cui metta i risultati dei test
-    - [ ] e motiviamo perchè abbiamo scelto quei parametri
 - [ ] fare un po' di grafici
 - [ ] provare a fare un sistema che salvi il video della battaglia finale
 

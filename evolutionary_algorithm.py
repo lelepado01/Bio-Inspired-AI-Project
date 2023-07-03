@@ -83,17 +83,17 @@ class EA_Config:
     CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.GAUSSIAN_BEST
 
     ### --- parametri di stopping criteria ---
-    STOPPING_CRITERIA = StoppingCriteria.GENERATIONS_WITHOUT_IMPROVEMENT
+    STOPPING_CRITERIA = StoppingCriteria.GENERATIONS
     MAX_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 4
     CURRENT_NUMBER_OF_EPOCHS_WITHOUT_IMPROVEMENT = 0
 
-    ### --- parametri di simulazione ---
+    ### --- parametri di battaglia ---
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 20
-    MAX_NUMBER_OF_EPOCHS = 30
+    MAX_NUMBER_OF_EPISODES = 10
+    MAX_NUMBER_OF_EPOCHS = 5
     
-    TOTAL_NUMBER_OF_AGENTS = 20
+    TOTAL_NUMBER_OF_AGENTS = 100
     AGENT_CLASSES = 2
     CELLS_IN_GRID = 2

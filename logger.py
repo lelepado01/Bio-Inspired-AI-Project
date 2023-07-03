@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from map_elites_cell import MapElitesCell
+
 LOG_DIRECTORY = "logs/"
 PLT2D = "plt2d/"
 PLT3D = "plt3d/"
@@ -27,26 +29,36 @@ class Logger():
     def close(self):
         self.file.close()
 
+    def log_activity_grid(self, grid, label=""):
+        ls = np.array([[i for i in grid]])
+        plt.clf()
+        plt.imshow(ls, cmap='hot', interpolation='nearest', vmin=0, vmax=max(grid))
+        plt.xlabel("(Number of Melee, Number of Ranged)")
+        plt.colorbar()
+
+        plt.savefig(LOG_DIRECTORY + PLT2D + label + "_epoch_"+ str(self.log_counter))
+
+
     def to_plot_2d(self, grid, label=""): 
         agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in grid]
         ls = np.array([[i[1] for i in grid]])
 
+        # for i in range(len(ls[0])):
+        #     color = "black" if ls[0][i] == max([v for v in ls[0]]) else "w"
+        #     plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
+
         plt.clf()
         plt.imshow(ls, cmap='hot', interpolation='nearest', vmin=-4000, vmax=4000)
         plt.xlabel("(Number of Melee, Number of Ranged)")
-        plt.xticks(np.arange(len(agent_count)), agent_count)
-
-        for i in range(len(ls[0])):
-            color = "black" if ls[0][i] == max([v for v in ls[0]]) else "w"
-            plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
-        
+        plt.xticks(np.arange(len(agent_count)), agent_count, rotation=90)
         plt.colorbar()
+        
         plt.savefig(LOG_DIRECTORY + PLT2D + label + "_epoch_"+ str(self.log_counter))
         self.log_counter += 1
 
     def to_plot_3d(self, grid, label=""):
         agent_count = [(i[0].number_of_melee, i[0].number_of_ranged) for i in grid]
-        ls = [-i[1] for i in grid]
+        ls = [i[1] for i in grid]
 
         plt.clf()
         fig = plt.figure(figsize=(8, 8))

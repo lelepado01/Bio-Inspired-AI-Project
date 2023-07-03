@@ -43,7 +43,6 @@ def parallel_env(
         env_data,
     )
 
-
 def raw_env(
     map_size=default_map_size,
     max_cycles=max_cycles_default,
@@ -67,9 +66,7 @@ def raw_env(
         )
     )
 
-
 env = make_env(raw_env)
-
 
 def get_config(
     map_size,
@@ -207,7 +204,6 @@ def get_config(
 
     return cfg
 
-
 def sanity_check(melee_pos, ranged_pos, width, height):
     for x, y in melee_pos + ranged_pos:
         if not (0 < x < width - 1 and 0 < y < height - 1):
@@ -277,10 +273,12 @@ def generate_map(env, map_size, handles, env_data):
         current_pos_x = gap
         current_pos_y = gap
         while agent_index < env_data.number_of_melee + env_data.number_of_ranged: 
-            if agent_index < env_data.number_of_melee:
-                melee_pos.append([current_pos_x, current_pos_y])
-            else:
+            if agent_index < env_data.number_of_ranged:
+                # aggiungi prima ranged (a sinistra)
                 ranged_pos.append([current_pos_x, current_pos_y])
+            else:
+                # poi i melee (a destra)
+                melee_pos.append([current_pos_x, current_pos_y])
             agent_index += 1
             current_pos_y += 2
             if current_pos_y >= side:
@@ -300,8 +298,10 @@ def generate_map(env, map_size, handles, env_data):
         current_pos_y = gap
         while agent_index < env_data.number_of_melee + env_data.number_of_ranged: 
             if agent_index < env_data.number_of_melee:
+                # aggiungi prima melee (a sinistra) (opposto rispetto a prima)
                 melee_pos.append([current_pos_x, current_pos_y])
             else:
+                # poi i ranged (a destra)
                 ranged_pos.append([current_pos_x, current_pos_y])
             agent_index += 1
             current_pos_y += 2
