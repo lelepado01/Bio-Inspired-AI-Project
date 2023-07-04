@@ -164,6 +164,26 @@ class MAP_Elites:
             if EA_Config.DEBUG:
                 print(f"Selected cell: {selected_index}")
             return selected_index
+
+        elif EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM_BEST:
+
+            if random.randint(0, 10) / 10 < 0.5: 
+                while True: # necessario per evitare che venga selezionata la stessa cella
+                    random_index = random.randint(0, len(self.primary_grid)-1)
+                    if random_index != cell_index:
+                        if EA_Config.DEBUG:
+                            print(f"Selected cell: {random_index}")
+                        return random_index
+
+            values = [cell[1] for cell in self.primary_grid]
+            if cell_index is not None: 
+                # tolgo la cella già scelta
+                values[cell_index] = -10000000000
+
+            selected_index = np.argmax(values)
+            if EA_Config.DEBUG:
+                print(f"Selected cell: {selected_index}")
+            return selected_index
             
         else: 
             raise Exception("Invalid crossover selection strategy")

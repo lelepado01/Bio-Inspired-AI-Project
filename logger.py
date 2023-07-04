@@ -46,7 +46,7 @@ class Logger():
         #     plt.text(i, 0, str(round(ls[0][i], 2)), ha="center", va="center", color=color)
 
         plt.clf()
-        plt.imshow(ls, cmap='hot', interpolation='nearest', vmin=-4000, vmax=4000)
+        plt.imshow(ls, cmap='hot', interpolation='nearest', vmin=-4000, vmax=0)
         plt.xlabel("(Number of Melee, Number of Ranged)")
         plt.xticks(np.arange(len(agent_count)), agent_count, rotation=90)
         plt.colorbar()

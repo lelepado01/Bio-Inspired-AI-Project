@@ -64,6 +64,11 @@ class CrossoverSelectionStrategy:
     Seleziona cella con probabilità basata sul valore fitness
     """
 
+    RANDOM_BEST = 4
+    """
+    Seleziona migliore cella se p > 0.5, altrimenti random 
+    """
+
 class StoppingCriteria:
     """
     Selezione di criteri di stop, le opzioni sono:
@@ -122,7 +127,7 @@ class EA_Config:
     CROSSOVER_WEIGHT = 0.2
 
     ### --- parametri di selezione ---
-    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.GAUSSIAN_BEST
+    CROSSOVER_SELECTION_STRATEGY = CrossoverSelectionStrategy.RANDOM
 
     ### --- parametri di stopping criteria ---
     STOPPING_CRITERIA = StoppingCriteria.GENERATIONS
@@ -133,7 +138,7 @@ class EA_Config:
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 1 
+    MAX_NUMBER_OF_EPISODES = 1
     """
     Numero di episodi per ogni generazione
     
