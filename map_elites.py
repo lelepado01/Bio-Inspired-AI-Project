@@ -116,9 +116,6 @@ class MAP_Elites:
         return fitness_score / EA_Config.MAX_NUMBER_OF_EPISODES
 
     def select_cell(self, cell_index=None):
-        """
-        Seleziona una cella della griglia in base alla strategia di selezione 
-        """
 
         if EA_Config.CROSSOVER_SELECTION_STRATEGY == CrossoverSelectionStrategy.RANDOM: 
             while True: # necessario per evitare che venga selezionata la stessa cella
