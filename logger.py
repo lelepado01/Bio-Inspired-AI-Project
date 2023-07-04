@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from map_elites_cell import MapElitesCell
-
 LOG_DIRECTORY = "logs/"
 PLT2D = "plt2d/"
 PLT3D = "plt3d/"
