@@ -145,7 +145,7 @@ class EA_Config:
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 3
+    MAX_NUMBER_OF_EPISODES = 30
     """
     Numero di episodi per ogni generazione
     
@@ -156,7 +156,7 @@ class EA_Config:
     """
     Numero di cicli per ogni episodio
     """
-    MAX_NUMBER_OF_EPOCHS = 500
+    MAX_NUMBER_OF_EPOCHS = 100
     """
     Numero di epoche per map elites
     """
