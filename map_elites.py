@@ -104,8 +104,8 @@ class MAP_Elites:
                     print("Adversarial Activity: ")
                     print(self.adversarial_activity_grid)
                     print("Best adversarial cell: ")
-                    archers = self.get_best_solutions(self.adversarial_grid)[np.argmax(self.get_best_fitness(self.adversarial_grid))].current_value
-                    melee = EA_Config.TOTAL_NUMBER_OF_AGENTS - archers
+                    melee = self.get_best_solutions(self.adversarial_grid)[np.argmax(self.get_best_fitness(self.adversarial_grid))].current_value
+                    archers = EA_Config.TOTAL_NUMBER_OF_AGENTS - melee
                     print(f"Melee: {melee}, Archers: {archers}")
 
                 break
@@ -115,7 +115,7 @@ class MAP_Elites:
         self.logger.plot_fitness(FITNESS_LABEL)
         self.logger.close()
 
-    def fitness_function(self, env_data, max_steps=10000):
+    def fitness_function(self, env_data, max_steps=EA_Config.MAX_NUMBER_OF_CYCLES):
         if EA_Config.DEBUG:
             print("Evaluating enviroment...")
         # eseguiamo l'environemnt con i parametri passati, 

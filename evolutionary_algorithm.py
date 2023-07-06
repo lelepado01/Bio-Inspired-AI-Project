@@ -1,6 +1,7 @@
 
 class MutationStrategy:
     """
+    #### MutationStrategy
     Selezione di strategie di mutazione, le opzioni sono:
     - RANDOM: prende un valore random all'interno del range della cella
     e lo assegna come nuovo valore
@@ -37,6 +38,7 @@ class CrossoverStrategy:
 
 class CrossoverSelectionStrategy:
     """
+    #### CrossoverSelectionStrategy
     Selezione di strategie di selezione per il crossover, le opzioni sono:
     - RANDOM: seleziona due celle random
     - ADJACENT: seleziona due celle adiacenti
@@ -143,14 +145,21 @@ class EA_Config:
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 30
+    MAX_NUMBER_OF_EPISODES = 3
     """
     Numero di episodi per ogni generazione
     
     Non ha molto senso fare tanti episodi, visto che è come aggiungere epoche ma MAP elites non puù interagire 
     Il senso di questo parametro è se ci serve una simulation più stabile, quindi viene fatta un'average su più episodi
     """
-    MAX_NUMBER_OF_EPOCHS = 10
+    MAX_NUMBER_OF_CYCLES = 100000
+    """
+    Numero di cicli per ogni episodio
+    """
+    MAX_NUMBER_OF_EPOCHS = 500
+    """
+    Numero di epoche per map elites
+    """
     
     TOTAL_NUMBER_OF_AGENTS = 100
     CELLS_IN_GRID = 20
