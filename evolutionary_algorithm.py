@@ -112,6 +112,11 @@ class EA_Config:
      - Se *False* utilizza una sola griglia, con i due agenti che usano le stesse formazioni
     (la stessa combinazione di melee e ranged agents)
     """
+    SAVE_FITNESS_AVG = False
+    """
+    - Se *True* salva la media dei fitness di ogni run
+    - Se *False* salva la migliore fitness di ogni run
+    """
 
     ### --- parametri di mutation ---
     MUTATION_STRATEGY = MutationStrategy.GAUSSIAN
@@ -138,15 +143,14 @@ class EA_Config:
     INITIAL_FORMATION_TYPE = FormationType.RANDOM
 
     ### --- parametri di simulazione ---
-    MAX_NUMBER_OF_EPISODES = 1
+    MAX_NUMBER_OF_EPISODES = 30
     """
     Numero di episodi per ogni generazione
     
     Non ha molto senso fare tanti episodi, visto che è come aggiungere epoche ma MAP elites non puù interagire 
     Il senso di questo parametro è se ci serve una simulation più stabile, quindi viene fatta un'average su più episodi
     """
-    MAX_NUMBER_OF_EPOCHS = 500
+    MAX_NUMBER_OF_EPOCHS = 10
     
     TOTAL_NUMBER_OF_AGENTS = 100
-    # AGENT_CLASSES = 2
     CELLS_IN_GRID = 20

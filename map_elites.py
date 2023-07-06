@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from pettingzoo.utils import random_demo
+from custom_functions import random_demo, average_total_reward
 
 import custom_combined_arms
 from map_elites_cell import MapElitesCell
@@ -33,8 +33,14 @@ class MAP_Elites:
             envdata = MapElitesCell(i)
             # e passiamo questa soluzione nel giochino per vedere come performa, 
             # restituisce direttamente il total_reward, quello che dobbiamo massimizzare
-            fitness = self.fitness_function(envdata)
-            grid[i] = (envdata, fitness)
+            fitness_avg, fitness_best = self.fitness_function(envdata, max_steps=100)
+            if EA_Config.DEBUG:
+                print(f"Fitness: {fitness_avg} - {fitness_best}")
+
+            if EA_Config.SAVE_FITNESS_AVG:
+                grid[i] = (envdata, fitness_avg)
+            else:
+                grid[i] = (envdata, fitness_best)
         return grid
     
     def run_iteration_on_grid(self, grid, activity):
@@ -43,7 +49,10 @@ class MAP_Elites:
         # Mutate the solution in the selected cell
         mutated_solution = self.mutation_and_crossover(cell_index)
         # Evaluate the fitness of the mutated solution
-        fitness = self.fitness_function(mutated_solution)
+        fitness_avg, fitness_best = self.fitness_function(mutated_solution)
+        fitness = fitness_best
+        if EA_Config.SAVE_FITNESS_AVG:
+            fitness = fitness_avg
         # Aggiorniamo la soluzione nella griglia 
         # solo se la fitness è migliore
         if fitness >= grid[cell_index][1]:
@@ -106,14 +115,16 @@ class MAP_Elites:
         self.logger.plot_fitness(FITNESS_LABEL)
         self.logger.close()
 
-    def fitness_function(self, env_data):
+    def fitness_function(self, env_data, max_steps=10000):
         if EA_Config.DEBUG:
             print("Evaluating enviroment...")
         # eseguiamo l'environemnt con i parametri passati, 
         # che danno informazioni riguardo a numero di agenti e tipo di agenti
         env = custom_combined_arms.env(env_data=env_data, render_mode=None)
-        fitness_score = random_demo(env, render=False, episodes=EA_Config.MAX_NUMBER_OF_EPISODES)
-        return fitness_score / EA_Config.MAX_NUMBER_OF_EPISODES
+        # fitness_score, best_fitness = random_demo(env, render=False, episodes=EA_Config.MAX_NUMBER_OF_EPISODES)
+        fitness_score = average_total_reward(env, max_episodes=EA_Config.MAX_NUMBER_OF_EPISODES, max_steps=max_steps)
+        best_fitness = fitness_score
+        return fitness_score / EA_Config.MAX_NUMBER_OF_EPISODES, best_fitness
 
     def select_cell(self, cell_index=None):
 
