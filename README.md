@@ -7,7 +7,9 @@ Gabriele Padovani ```229207```
 Nadia Benini ```241520```
 
 ## Description 🐘
-Boh
+
+The report for this project is in this github repository at: ``` BioInspiredAI.pdf ```
+
 
 ## Installation 🚀🐥
 
@@ -70,15 +72,6 @@ random_demo(env, render=True, episodes=1)
 To run the project, execute the file *main.py*: 
     
 ```python main.py```
-
-## TODOs
-
-- [ ] testare la default position degli agenti 
-- [ ] aggiungere descrizioni alle funzioni, invece di avere commenti ovunque potrebbe essere più ordinato 
-- [ ] Fare descrizione del progetto su README.md
-
-- [ ] fare un po' di grafici
-- [ ] provare a fare un sistema che salvi il video della battaglia finale
 
 ## Useful links 🔗
 
