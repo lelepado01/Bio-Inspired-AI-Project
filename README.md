@@ -10,6 +10,7 @@ Nadia Benini ```241520```
 
 The report for this project is in this github repository at: ``` BioInspiredAI.pdf ```
 
+The aim of this project is to develop a MAP-Elites algorithm to find the optimal army composition to beat the adversary, who will try to do the same.
 
 ## Installation 🚀🐥
 
