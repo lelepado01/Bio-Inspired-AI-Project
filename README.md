@@ -81,7 +81,9 @@ https://arxiv.org/abs/2208.12758
 
 Paper on Quality Diversity: 
 https://quality-diversity.github.io/papers
+
 https://arxiv.org/pdf/2012.04322.pdf
+
 https://arxiv.org/pdf/2104.03936.pdf
 
 Magent2: 
