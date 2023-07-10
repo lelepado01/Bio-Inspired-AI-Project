@@ -1,18 +1,18 @@
 # 🐜 Bio-Inspired-AI-Project 🦖
 
-## Authors 🦄
+## Authors
 
 Gabriele Padovani ```229207```
 
 Nadia Benini ```241520```
 
-## Description 🐘
+## Description
 
 The report for this project is in this github repository at: ``` BioInspiredAI.pdf ```
 
 The aim of this project is to develop a MAP-Elites algorithm to find the optimal army composition to beat the adversary, who will try to do the same.
 
-## Installation 🚀🐥
+## Installation 🚀
 
 The library MAgent2 can supposedly be installed with pip, but in our case we encountered several difficulties. The way we ended up solving most of the issues is by installing the library following these steps:
 
@@ -20,7 +20,7 @@ The library MAgent2 can supposedly be installed with pip, but in our case we enc
 
 ```git clone https://github.com/lelepado01/Bio-Inspired-AI-Project.git```
 
-#### 2. Install MAgent2 and Requirements💿
+#### 2. Install MAgent2 and Requirements 💿
 
 ```pip install -r requirements.txt```
 
@@ -58,7 +58,7 @@ In the file *render.py* remove:
 
 This should fix a bug we encountered when running the environment several times, the window would get smaller and smaller, until the program crashed.
 
-#### 6. Test the library
+#### 6. Test the library 👷‍♂️
 
 Run the following code to test the library:
 
